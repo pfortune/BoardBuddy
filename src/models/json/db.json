@@ -1,0 +1,40 @@
+{
+    "users": [
+      {
+        "firstName": "Homer",
+        "lastName": "Simpson",
+        "email": "homer@simpson.com",
+        "password": "secret",
+        "_id": "f411e96c-5c83-4995-bf08-4c2352e21bdf"
+      },
+      {
+        "firstName": "Marge",
+        "lastName": "Simpson",
+        "email": "marge@simpson.com",
+        "password": "secret",
+        "_id": "c68d049e-a0c9-4b38-9321-4e9c950b9ac3"
+      },
+      {
+        "firstName": "Bart",
+        "lastName": "Simpson",
+        "email": "bart@simpson.com",
+        "password": "secret",
+        "_id": "140333e6-559e-4934-a568-64a47c950440"
+      }
+    ],
+    "locations": [
+      {
+        "title": "Revolution",
+        "_id": "7cd5f31a-d431-4124-9eab-992ed84fcc67"
+      },
+      {
+        "title": "Geoffs",
+        "_id": "7ce22653-fde3-4bea-9c1c-de2cf145bb12"
+      },
+      {
+        "title": "Gallweys Chocolate Cafe",
+        "_id": "7a8ae3d4-5df0-49ce-9f57-4958ca93f65e"
+      }
+    ],
+    "games": []
+  }

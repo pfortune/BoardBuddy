@@ -1,61 +1,65 @@
-import Hapi from '@hapi/hapi';
+import Vision from "@hapi/vision";
+import Hapi from "@hapi/hapi";
+import Cookie from "@hapi/cookie";
 import dotenv from "dotenv";
 import path from "path";
 import Joi from "joi";
-import { fileURLToPath } from 'url';
-import { db } from "./models/db.js";
+import { fileURLToPath } from "url";
+import Handlebars from "handlebars";
 import { webRoutes } from "./web-routes.js";
+import { db } from "./models/db.js";
+import { accountsController } from "./controllers/accounts-controller.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const result = dotenv.config();
 if (result.error) {
-    console.log(result.error);
-    process.exit(1);
+  console.log(result.error.message);
+  process.exit(1);
 }
 
 async function init() {
-    const server = Hapi.server({
-        port: process.env.PORT || 3000,
-    });
+  const server = Hapi.server({
+    port: process.env.PORT || 3000,
+  });
 
-    await server.register(Cookie);
-    server.validator(Joi);
+  await server.register(Vision);
+  await server.register(Cookie);
+  server.validator(Joi);
 
-    server.views({
-        engines: {
-            html: require('handlebars')
-        },
-        relativeTo: __dirname,
-        path: "./views",
-        layoutPath: "./views/layouts",
-        helpersPath: "./views/helpers",
-        partialsPath: "./views/partials",
-        layout: true,
-        isCached: false
-    });
+  server.views({
+    engines: {
+      hbs: Handlebars,
+    },
+    relativeTo: __dirname,
+    path: "./views",
+    layoutPath: "./views/layouts",
+    partialsPath: "./views/partials",
+    layout: true,
+    isCached: false,
+  });
 
-    server.auth.strategy("session", "cookie", {
-        cookie: {
-            name: process.env.COOKIE_NAME,
-            password: process.env.COOKIE_PASSWORD,
-            isSecure: false
-        },
-        redirectTo: "/",
-        validate: accountsController.validate
-    });
-    server.auth.default("session");
+  server.auth.strategy("session", "cookie", {
+    cookie: {
+      name: process.env.cookie_name,
+      password: process.env.cookie_password,
+      isSecure: false,
+    },
+    redirectTo: "/",
+    validate: accountsController.validate,
+  });
+  server.auth.default("session");
 
-    db.init();
-    server.route(webRoutes);
-    await server.start();
-    console.log(`Server running on ${server.info.uri}`);
+  db.init();
+  server.route(webRoutes);
+  await server.start();
+  console.log("Server running on %s", server.info.uri);
 }
 
 process.on("unhandledRejection", (err) => {
-    console.log(err);
-    process.exit(1);
+  console.log(err);
+  process.exit(1);
 });
 
 init();

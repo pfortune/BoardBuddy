@@ -14,6 +14,10 @@ export const UserCredentialsSpec = {
 
 export const GameSpec = {
   title: Joi.string().required(),
+  age: Joi.number().required(),
+  min_players: Joi.number().required(),
+  max_players: Joi.number().required(),
+  duration: Joi.number().required(),
   description: Joi.string().required(),
 };
 
