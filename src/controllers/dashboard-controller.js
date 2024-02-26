@@ -9,7 +9,7 @@ export const dashboardController = {
       const viewData = {
         title: "Board Buddy Dashboard",
         user: loggedInUser,
-        playlists,
+        locations,
       };
       return h.view("dashboard-view", viewData);
     },

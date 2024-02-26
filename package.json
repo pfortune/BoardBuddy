@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "A web app connecting board game enthusiasts with local gaming venues.",
   "main": "src/server.js",
+  "type": "module",
   "scripts": {
     "start": "nodemon src/server.js",
     "lint": "eslint . --ext .js",

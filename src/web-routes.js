@@ -12,12 +12,12 @@ export const webRoutes = [
   { method: "POST", path: "/authenticate", config: accountsController.login },
 
   { method: "GET", path: "/dashboard", config: dashboardController.index },
-  { method: "POST", path: "/dashboard/add", config: dashboardController.addlocation },
-  { method: "GET", path: "/dashboard/delete/{id}", config: dashboardController.deletelocation },
+  { method: "POST", path: "/dashboard/add", config: dashboardController.addLocation },
+  { method: "GET", path: "/dashboard/delete/{id}", config: dashboardController.deleteLocation },
 
   { method: "GET", path: "/location/{id}", config: locationController.index },
-  { method: "POST", path: "/location/{id}/add/game", config: locationController.addgame },
-  { method: "GET", path: "/location/{id}/delete/game/{gameid}", config: locationController.deletegame },
+  { method: "POST", path: "/location/{id}/add/game", config: locationController.addGame },
+  { method: "GET", path: "/location/{id}/delete/game/{gameid}", config: locationController.deleteGame },
 
   { method: "GET", path: "/about", config: aboutController.index },
 ];
