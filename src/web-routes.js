@@ -20,4 +20,6 @@ export const webRoutes = [
   { method: "GET", path: "/location/{id}/delete/game/{gameid}", config: locationController.deleteGame },
 
   { method: "GET", path: "/about", config: aboutController.index },
+
+  { method: "GET", path: "/{param*}", handler: { directory: { path: "./public" } }, options: { auth: false } },
 ];

@@ -3,7 +3,6 @@ import { db } from "../src/models/db.js";
 import { testLocations, geoffs } from "./fixtures.js";
 
 suite("Location Model tests", () => {
-
   setup(async () => {
     db.init("json");
     await db.locationStore.deleteAllLocations();
@@ -14,7 +13,7 @@ suite("Location Model tests", () => {
   });
 
   test("create a location", async () => {
-    const location = await db.locationStore.addLocation(mozart);
+    const location = await db.locationStore.addLocation(geoffs);
     assert.equal(geoffs, location);
     assert.isDefined(location._id);
   });
@@ -30,7 +29,7 @@ suite("Location Model tests", () => {
   test("get a location - success", async () => {
     const location = await db.locationStore.addLocation(geoffs);
     const returnedLocation = await db.locationStore.getLocationById(location._id);
-    assert.equal(mozart, location);
+    assert.equal(geoffs, location);
   });
 
   test("delete One Location - success", async () => {
