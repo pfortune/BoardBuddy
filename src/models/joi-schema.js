@@ -23,6 +23,7 @@ export const GameSpec = {
 
 export const LocationSpec = {
   title: Joi.string().required(),
+  category: Joi.string().required(),
   x: Joi.number().optional(),
   y: Joi.number().optional(),
 };
