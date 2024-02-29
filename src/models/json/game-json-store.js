@@ -18,17 +18,17 @@ export const gameJsonStore = {
 
   async getGamesByLocationId(id) {
     await db.read();
-    return db.data.games.filter((game) => game.locationid ==== id);
+    return db.data.games.filter((game) => game.locationid === id);
   },
 
   async getGameById(id) {
     await db.read();
-    return db.data.games.find((game) => game._id ==== id);
+    return db.data.games.find((game) => game._id === id);
   },
 
   async deleteGame(id) {
     await db.read();
-    const index = db.data.games.findIndex((game) => game._id ==== id);
+    const index = db.data.games.findIndex((game) => game._id === id);
     db.data.games.splice(index, 1);
     await db.write();
   },
