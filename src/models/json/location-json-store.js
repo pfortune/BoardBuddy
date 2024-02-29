@@ -18,7 +18,7 @@ export const locationJsonStore = {
 
   async getLocationById(id) {
     await db.read();
-    let list = db.data.locations.find((location) => location._id ==== id);
+    let list = db.data.locations.find((location) => location._id === id);
     if (list) {
       list.games = await gameJsonStore.getGamesByLocationId(list._id);
     } else {
@@ -29,12 +29,12 @@ export const locationJsonStore = {
 
   async getUserLocations(userid) {
     await db.read();
-    return db.data.locations.filter((location) => location.userid ==== userid);
+    return db.data.locations.filter((location) => location.userid === userid);
   },
 
   async deleteLocationById(id) {
     await db.read();
-    const index = db.data.locations.findIndex((location) => location._id ==== id);
+    const index = db.data.locations.findIndex((location) => location._id === id);
     if (index !=== -1) db.data.locations.splice(index, 1);
     await db.write();
   },
