@@ -34,6 +34,7 @@ export const dashboardController = {
       const newLocation = {
         userid: loggedInUser._id,
         title: request.payload.title,
+        category: request.payload.category,
       };
       await db.locationStore.addLocation(newLocation);
       return h.redirect("/dashboard");
