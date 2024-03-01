@@ -41,8 +41,8 @@ export const gameJsonStore = {
   async updateGame(game, updatedGame) {
     game.title = updatedGame.title;
     game.age = updatedGame.age;
-    game.min_players = updatedGame.min_players;
-    game.max_players = updatedGame.max_players;
+    game.minPlayers = updatedGame.minPlayers;
+    game.maxPlayers = updatedGame.maxPlayers;
     game.duration = updatedGame.duration;
     game.description = updatedGame.description;
     await db.write();
