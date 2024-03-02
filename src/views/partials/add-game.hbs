@@ -1,11 +1,10 @@
-<form class="box" action="/location/{{location._id}}/addgame" method="POST">
+<form class="box" action="/location/{{location._id}}/add/game" method="POST">
   <label>Enter Game Details:</label>
   <div class="field is-horizontal">
     <div class="field-body">
       <div class="field">
         <input class="input" type="text" placeholder="Enter Title" name="title" />
       </div>
-      <!-- Fields for age, minPlayers, maxPlayers, description and playTime -->
         <div class="field">
             <input class="input" type="number" placeholder="Enter Age" name="age" />
         </div>
@@ -16,10 +15,7 @@
             <input class="input" type="number" placeholder="Enter Max Players" name="maxPlayers" />
         </div>
         <div class="field">
-            <input class="input" type="text" placeholder="Enter Description" name="description" />
-        </div>
-        <div class="field">
-            <input class="input" type="number" placeholder="Enter Play Time" name="playTime" />
+            <input class="input" type="number" placeholder="Enter Play Time" name="duration" />
         </div>
     </div>
   </div>

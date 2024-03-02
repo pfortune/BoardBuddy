@@ -5,7 +5,7 @@ export const dashboardController = {
   index: {
     handler: async function (request, h) {
       const loggedInUser = request.auth.credentials;
-      const location = await db.locationStore.getUserLocation(loggedInUser._id);
+      const locations = await db.locationStore.getLocations(loggedInUser._id);
       const viewData = {
         title: "Board Buddy Dashboard",
         user: loggedInUser,
@@ -34,6 +34,7 @@ export const dashboardController = {
       const newLocation = {
         userid: loggedInUser._id,
         title: request.payload.title,
+        category: request.payload.category,
       };
       await db.locationStore.addLocation(newLocation);
       return h.redirect("/dashboard");

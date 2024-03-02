@@ -34,8 +34,8 @@ export const locationController = {
       const newGame = {
         title: request.payload.title,
         age: Number(request.payload.age),
-        min_players: Number(request.payload.artist),
-        max_players: Number(request.payload.album),
+        minPlayers: Number(request.payload.minPlayers),
+        maxPlayers: Number(request.payload.maxPlayers),
         duration: Number(request.payload.duration),
         description: request.payload.description,
       };
