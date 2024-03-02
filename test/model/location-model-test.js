@@ -1,10 +1,11 @@
 import { assert } from "chai";
-import { db } from "../src/models/db.js";
-import { testLocations, geoffs } from "./fixtures.js";
+import { db } from "../../src/models/db.js";
+import { assertSubset } from "../test-utils.js";
+import { testLocations, geoffs } from "../fixtures.js";
 
 suite("Location Model tests", () => {
   setup(async () => {
-    db.init("json");
+    db.init("mongo");
     await db.locationStore.deleteAllLocations();
     for (let i = 0; i < testLocations.length; i += 1) {
       // eslint-disable-next-line no-await-in-loop
@@ -14,7 +15,7 @@ suite("Location Model tests", () => {
 
   test("create a location", async () => {
     const location = await db.locationStore.addLocation(geoffs);
-    assert.equal(geoffs, location);
+    assertSubset(geoffs, location);
     assert.isDefined(location._id);
   });
 
@@ -29,7 +30,7 @@ suite("Location Model tests", () => {
   test("get a location - success", async () => {
     const location = await db.locationStore.addLocation(geoffs);
     const returnedLocation = await db.locationStore.getLocationById(location._id);
-    assert.equal(geoffs, location);
+    assertSubset(geoffs, returnedLocation);
   });
 
   test("delete One Location - success", async () => {
