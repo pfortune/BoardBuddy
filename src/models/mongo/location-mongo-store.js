@@ -18,6 +18,11 @@ export const locationMongoStore = {
     return null;
   },
 
+  async getLocationsByCategory(category) {
+    const locations = await Location.find({ category: category }).lean();
+    return locations;
+  },
+
   async addLocation(location) {
     const newLocation = new Location(location);
     const locationObj = await newLocation.save();
@@ -39,5 +44,5 @@ export const locationMongoStore = {
 
   async deleteAllLocations() {
     await Location.deleteMany({});
-  }
+  },
 };

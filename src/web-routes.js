@@ -2,6 +2,7 @@ import { accountsController } from "./controllers/accounts-controller.js";
 import { dashboardController } from "./controllers/dashboard-controller.js";
 import { locationController } from "./controllers/location-controller.js";
 import { aboutController } from "./controllers/about-controller.js";
+import { searchController } from "./controllers/search-controller.js";
 
 export const webRoutes = [
   { method: "GET", path: "/", config: accountsController.index },
@@ -14,6 +15,9 @@ export const webRoutes = [
   { method: "GET", path: "/dashboard", config: dashboardController.index },
   { method: "POST", path: "/dashboard/add", config: dashboardController.addLocation },
   { method: "GET", path: "/dashboard/delete/{id}", config: dashboardController.deleteLocation },
+
+  { method: "GET", path: "/search", config: searchController.index},
+  { method: "GET", path: "/search/{category}", config: searchController.category },
 
   { method: "GET", path: "/location/{id}", config: locationController.index },
   { method: "POST", path: "/location/{id}/add/game", config: locationController.addGame },

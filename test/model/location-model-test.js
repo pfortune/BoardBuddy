@@ -27,6 +27,22 @@ suite("Location Model tests", () => {
     assert.equal(returnedLocations.length, 0);
   });
 
+  test("get locations by category - success", async () => {
+    const bars = await db.locationStore.getLocationsByCategory("Bar");
+    assert.equal(bars.length, 1);
+    assertSubset({ title: "Revolutions", category: "Bar" }, bars[0]);
+
+    const cafes = await db.locationStore.getLocationsByCategory("Cafe");
+    assert.equal(cafes.length, 1);
+    assertSubset({ title: "The White Rabbit", category: "Cafe" }, cafes[0]);
+  });
+
+  test("get locations by category - no results", async () => {
+    const ghostCategory = await db.locationStore.getLocationsByCategory("Ghost");
+    assert.isArray(ghostCategory);
+    assert.equal(ghostCategory.length, 0);
+  });
+
   test("get a location - success", async () => {
     const location = await db.locationStore.addLocation(geoffs);
     const returnedLocation = await db.locationStore.getLocationById(location._id);
