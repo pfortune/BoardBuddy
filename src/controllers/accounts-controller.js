@@ -64,7 +64,7 @@ export const accountsController = {
       const { email, password } = request.payload;
       const user = await db.userStore.getUserByEmail(email);
       if (!user || user.password !== password) {
-        return h.redirect("/");
+        return h.redirect("/login");
       }
       request.cookieAuth.set({ id: user._id });
       return h.redirect("/dashboard");
