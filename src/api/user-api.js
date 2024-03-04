@@ -39,7 +39,7 @@ export const userApi = {
         }
         return user;
       } catch (err) {
-        return Boom.serverUnavailable("Database Error");
+        return Boom.serverUnavailable("No User with this id");
       }
     },
   },
@@ -51,7 +51,7 @@ export const userApi = {
         await db.userStore.deleteAll();
         return h.response().code(204);
       } catch (err) {
-        return Boom.serverUnavailable("Database Error");
+        return Boom.serverUnavailable("No User with this id");
       }
     },
   },
@@ -63,7 +63,7 @@ export const userApi = {
         const deletedUser = await db.userStore.deleteUserById(request.params.id);
         return h.response(deletedUser).code(204);
       } catch (err) {
-        return Boom.serverUnavailable("Database Error");
+        return Boom.serverUnavailable("No User with this id");
       }
     },
   },
