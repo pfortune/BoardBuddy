@@ -1,3 +1,13 @@
+/**
+ * Joi validation schemas for User, UserCredentials, Game, and Location entities.
+ * Defines required and optional fields for each entity to ensure data integrity.
+ *
+ * @module ValidationSchemas
+ * @author Peter Fortune
+ * @date 04/03/2024
+ */
+
+
 import Joi from "joi";
 
 export const UserSpec = {

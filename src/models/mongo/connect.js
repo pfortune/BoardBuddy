@@ -1,3 +1,12 @@
+/**
+ * Establishes connection to MongoDB using environment variables for configuration.
+ * Includes error handling and logging for connection events.
+ *
+ * @module connectMongo
+ * @author Peter Fortune
+ * @date 04/03/2024
+ */
+
 import * as dotenv from "dotenv";
 import Mongoose from "mongoose";
 

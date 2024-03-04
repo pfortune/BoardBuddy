@@ -1,3 +1,11 @@
+/**
+ * Schema definition for Game entities, including details and location linkage.
+ *
+ * @module Game
+ * @author Peter Fortune
+ * @date 04/03/2024
+ */
+
 import Mongoose from "mongoose";
 
 const { Schema } = Mongoose;

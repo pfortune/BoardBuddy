@@ -1,3 +1,14 @@
+/**
+ * Defines web routes for the application, mapping HTTP methods and paths to controller actions.
+ * Includes routes for account management (login, signup, logout), dashboard interactions,
+ * location management, game management, searching, and static content serving.
+ *
+ * @module webRoutes
+ * @author Peter Fortune
+ * @date 04/03/2024
+ */
+
+
 import { accountsController } from "./controllers/accounts-controller.js";
 import { dashboardController } from "./controllers/dashboard-controller.js";
 import { locationController } from "./controllers/location-controller.js";

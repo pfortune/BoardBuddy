@@ -1,3 +1,12 @@
+/**
+ * JSON-based storage for user data, supporting CRUD operations.
+ * Utilises UUIDs for user identification and performs operations in-memory with persistence via a JSON file.
+ *
+ * @module userJsonStore
+ * @author Peter Fortune
+ * @date 04/03/2024
+ */
+
 import { v4 } from "uuid";
 import { db } from "./store-utils.js";
 
