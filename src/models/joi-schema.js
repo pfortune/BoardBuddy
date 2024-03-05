@@ -10,31 +10,43 @@
 
 import Joi from "joi";
 
-export const UserSpec = {
-  firstName: Joi.string().required(),
-  lastName: Joi.string().required(),
-  email: Joi.string().email().required(),
-  password: Joi.string().required(),
-};
+export const IdSpec = Joi.alternatives().try(Joi.string(), Joi.object());
 
-export const UserCredentialsSpec = {
-  email: Joi.string().email().required(),
-  password: Joi.string().required(),
-};
+export const UserSpec = Joi.object()
+  .keys({
+    firstName: Joi.string().example("Homer").required(),
+    lastName: Joi.string().example("Simpson").required(),
+    email: Joi.string().email().example("homer@simpson.com").required(),
+    password: Joi.string().example("secret").required(),
+    _id: IdSpec,
+    __v: Joi.number()
+  })
+  .label("UserDetails");
 
-export const GameSpec = {
-  title: Joi.string().required(),
-  age: Joi.number().required(),
-  minPlayers: Joi.number().required(),
-  maxPlayers: Joi.number().required(),
-  duration: Joi.number().required(),
-  description: Joi.string().optional(),
-  category: Joi.string().optional(),
-};
+export const UserArray = Joi.array().items(UserSpec).label("UserArray");
 
-export const LocationSpec = {
-  title: Joi.string().required(),
-  category: Joi.string().required(),
-  x: Joi.number().optional(),
-  y: Joi.number().optional(),
-};
+export const UserCredentialsSpec = Joi.object().keys({
+  email: Joi.string().email().example("homer@simpson.com").required(),
+  password: Joi.string().example("secret").required(),
+}).label("UserCredentials");
+
+export const GameSpec = Joi.object().keys({
+  title: Joi.string().example("Eclipse").required(),
+  age: Joi.number().example(12).required(),
+  minPlayers: Joi.number().example(2).required(),
+  maxPlayers: Joi.number().example(4).required(),
+  duration: Joi.number().example(30).required(),
+  description: Joi.string().example("Explore distant galaxies in this exciting space adventure. Work together to navigate challenges and win!").optional(),
+  category: Joi.string().example("Strategy").optional(),
+}).label("GameDetails");
+
+export const GameArray = Joi.array().items(GameSpec).label("GameArray");
+
+export const LocationSpec = Joi.object().keys({
+  title: Joi.string().example("Central Park").required(),
+  category: Joi.string().example("Outdoor").required(),
+  x: Joi.number().example(40.785091).optional(), 
+  y: Joi.number().example(-73.968285).optional(),
+}).label("LocationDetails");
+
+export const LocationArray = Joi.array().items(LocationSpec).label("LocationArray");

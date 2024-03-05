@@ -7,6 +7,7 @@ suite("Game API tests", () => {
   let dooleysId = null;
 
   setup(async () => {
+    await buddyService.deleteAllUsers();
     await buddyService.deleteAllLocations();
     await buddyService.deleteAllGames();
     const dooleysLocation = await buddyService.createLocation(dooleys);

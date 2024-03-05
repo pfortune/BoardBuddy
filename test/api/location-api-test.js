@@ -37,11 +37,11 @@ suite("Location API tests", () => {
     assertSubset({ title: "The White Rabbit", category: "Cafe" }, cafes[0]);
   });
 
-  // test("get locations by category - no results", async () => {
-  //   const ghostCategory = await buddyService.getLocationsByCategory("Ghost");
-  //   assert.isArray(ghostCategory);
-  //   assert.equal(ghostCategory.length, 0);
-  // });
+  test("get locations by category - no results", async () => {
+    const ghostCategory = await buddyService.getLocationsByCategory("Ghost");
+    assert.isArray(ghostCategory);
+    assert.equal(ghostCategory.length, 0);
+  });
 
   test("get a location - success", async () => {
     const location = await buddyService.createLocation(geoffs);
