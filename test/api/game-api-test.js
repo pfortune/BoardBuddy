@@ -12,9 +12,9 @@ suite("Game API tests", () => {
     const dooleysLocation = await buddyService.createLocation(dooleys);
     dooleysId = dooleysLocation._id;
     // eslint-disable-next-line no-restricted-syntax
-    for (const game of testGames) {
+    for(let i = 0; i < testGames.length; i += 1) {
       // eslint-disable-next-line no-await-in-loop
-      await buddyService.createGame(dooleysId, game);
+      testGames[i] = await buddyService.createGame(testGames[i]);
     }
   });
 
@@ -25,8 +25,15 @@ suite("Game API tests", () => {
     assertSubset(chess, newGame);
   });
 
+  test("update a game", async () => {
+    const gameToUpdate = testGames[0]; 
+    const updatedGame = { ...gameToUpdate, title: "New Title" };
+    const newGame = await buddyService.updateGame(gameToUpdate._id, updatedGame);
+    assertSubset(updatedGame, newGame);
+  });
+
   test("get multiple games", async () => {
-    const games = await buddyService.getGamesByLocation(dooleysId);
+    const games = await buddyService.getAllGames();
     assert.equal(games.length, testGames.length);
   });
 
@@ -46,17 +53,20 @@ suite("Game API tests", () => {
   });
 
   test("delete one game - success", async () => {
-    const gameToDelete = testGames[0]; // Assuming this has been updated with an _id from creation
-    await buddyService.deleteGame(gameToDelete._id);
+    await buddyService.deleteGame(testGames[1]._id);
     const gamesAfterDelete = await buddyService.getAllGames();
     assert.equal(gamesAfterDelete.length, testGames.length - 1);
-    const deletedGame = await buddyService.getGame(gameToDelete._id);
-    assert.isNull(deletedGame);
   });
 
   test("get a game - bad params", async () => {
-    const invalidGame = await buddyService.getGame("invalid-id");
-    assert.isNull(invalidGame);
+    await buddyService.deleteGame(testGames[1]._id);
+    try {
+      const returnedGame = await buddyService.getGame(testGames[1]._id);
+      assert.fail("Should not return a response");
+    } catch (error) {
+      assert(error.response.data.message === "No Game with this id");
+      assert.equal(error.response.data.statusCode, 503);
+    }
   });
 
   test("delete one game - fail", async () => {
@@ -64,4 +74,6 @@ suite("Game API tests", () => {
     const games = await buddyService.getAllGames();
     assert.equal(games.length, testGames.length);
   });
+
+
 });
