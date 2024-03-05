@@ -40,6 +40,19 @@ export const locationApi = {
       }
     },
   },
+  
+  update: {
+    auth: false,
+    handler: async function(request, h) {
+      try {
+        await db.locationStore.update({ _id: request.params.id }, request.payload);
+        return h.response().code(204);
+      } catch (err) {
+        return Boom.serverUnavailable("No Location with this id");
+      }
+    },
+  
+  },
 
   deleteOne: {
     auth: false,
@@ -65,15 +78,39 @@ export const locationApi = {
     },
   },
 
-  findByCategory: {
+  findCategories: {
     auth: false,
     handler: async function(request, h) {
       try {
-        const locations = await db.locationStore.getLocationsByCategory(request.params.category);
-        return h.response(locations).code(200);
+        const categories = await db.locationStore.getCategories();
+        return h.response(categories).code(200);
       } catch (err) {
         return Boom.serverUnavailable("Database Error");
       }
+    },
+
+    addGameToLocation: {
+      auth: false,
+      handler: async function(request, h) {
+        try {
+          await db.locationStore.addGameToLocation(request.params.locationId, request.params.gameId);
+          return h.response().code(204);
+        } catch (err) {
+          return Boom.serverUnavailable("Database Error");
+        }
+      },
+    },
+
+    removeGameFromLocation: {
+      auth: false,
+      handler: async function(request, h) {
+        try {
+          await db.locationStore.removeGameFromLocation(request.params.locationId, request.params.gameId);
+          return h.response().code(204);
+        } catch (err) {
+          return Boom.serverUnavailable("Database Error");
+        }
+      },
     },
   },
 };

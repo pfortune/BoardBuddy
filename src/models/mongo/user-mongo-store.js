@@ -9,6 +9,7 @@
  */
 
 
+import { get } from "mongoose";
 import { User } from "./user.js";
 
 export const userMongoStore = {
@@ -30,6 +31,14 @@ export const userMongoStore = {
     const userObj = await newUser.save();
     const u = await this.getUserById(userObj._id);
     return u;
+  },
+
+  async updateUser(id, data) {
+    if(id && data) {
+        const updatedUser = await User.updateOne({ _id: id }, data);
+        return updatedUser;
+    }
+    return null;
   },
 
   async getUserByEmail(email) {

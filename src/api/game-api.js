@@ -18,14 +18,26 @@ export const gameApi = {
     },
   },
 
-  find: {
+  update: {
     auth: false,
     handler: async function(request, h) {
       try {
-        const games = await db.gameStore.getAllGames();
-        return h.response(games).code(200);
+        await db.gameStore.updateGame({ _id: request.params.id }, request.payload);
+        return h.response().code(204);
       } catch (err) {
-        return Boom.serverUnavailable("No Games found");
+        return Boom.serverUnavailable("No Game with this id");
+      }
+    },
+  },
+
+  deleteAll: {
+    auth: false,
+    handler: async function(request, h) {
+      try {
+        await db.gameStore.deleteAllGames();
+        return h.response().code(204);
+      } catch (err) {
+        return Boom.serverUnavailable("No Game with this id");
       }
     },
   },
@@ -45,30 +57,6 @@ export const gameApi = {
     },
   },
 
-  findByLocation: {
-    auth: false,
-    handler: async function(request, h) {
-      try {
-        const games = await db.gameStore.getGamesByLocationId(request.params.locationId);
-        return h.response(games).code(200);
-      } catch (err) {
-        return Boom.serverUnavailable("No games found for this location");
-      }
-    },
-  },
-
-  update: {
-    auth: false,
-    handler: async function(request, h) {
-      try {
-        await db.gameStore.updateGame({ _id: request.params.id }, request.payload);
-        return h.response().code(204);
-      } catch (err) {
-        return Boom.serverUnavailable("No Game with this id");
-      }
-    },
-  },
-
   deleteOne: {
     auth: false,
     handler: async function(request, h) {
@@ -81,15 +69,27 @@ export const gameApi = {
     },
   },
 
-  deleteAll: {
+  find: {
     auth: false,
     handler: async function(request, h) {
       try {
-        await db.gameStore.deleteAllGames();
-        return h.response().code(204);
+        const games = await db.gameStore.getAllGames();
+        return h.response(games).code(200);
       } catch (err) {
-        return Boom.serverUnavailable("No Game with this id");
+        return Boom.serverUnavailable("No Games found");
       }
     },
   },
+
+  findByLocation: {
+    auth: false,
+    handler: async function(request, h) {
+      try {
+        const games = await db.gameStore.getGamesByLocationId(request.params.locationId);
+        return h.response(games).code(200);
+      } catch (err) {
+        return Boom.serverUnavailable("No games found for this location");
+      }
+    },
+  },  
 };

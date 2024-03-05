@@ -8,7 +8,6 @@
  * @date 04/03/2024
  */
 
-
 import { userApi } from "./api/user-api.js";
 import { gameApi } from "./api/game-api.js";
 import { locationApi } from "./api/location-api.js";
@@ -17,32 +16,39 @@ export const apiRoutes = [
   // User Routes
   { method: "POST", path: "/api/users", config: userApi.create },
   { method: "GET", path: "/api/users", config: userApi.find },
-  // { method: "PUT", path: "/api/users/{id}", config: userApi.update }, 
+  { method: "PUT", path: "/api/users/{id}", config: userApi.update },
   { method: "DELETE", path: "/api/users", config: userApi.deleteAll },
   { method: "GET", path: "/api/users/{id}", config: userApi.findOne },
   { method: "DELETE", path: "/api/users/{id}", config: userApi.deleteOne },
+  { method: "GET", path: "/api/users/{id}/locations", config: userApi.findLocationsByUser },
 
   // Game Routes
   { method: "POST", path: "/api/games", config: gameApi.create },
-  { method: "GET", path: "/api/games", config: gameApi.findAll },
-  { method: "PUT", path: "/api/games/{id}", config: gameApi.update }, 
+  { method: "PUT", path: "/api/games/{id}", config: gameApi.update },
   { method: "DELETE", path: "/api/games", config: gameApi.deleteAll },
   { method: "GET", path: "/api/games/{id}", config: gameApi.findOne },
   { method: "DELETE", path: "/api/games/{id}", config: gameApi.deleteOne },
-  // { method: "GET", path: "/api/games/categories", config: gameApi.findCategories }, 
+  { method: "GET", path: "/api/games", config: gameApi.find },
+  { method: "GET", path: "/api/games/{id}/locations", config: gameApi.findByLocation },
 
   // Location Routes
   { method: "POST", path: "/api/locations", config: locationApi.create },
-  { method: "GET", path: "/api/locations", config: locationApi.findAll },
-  // { method: "PUT", path: "/api/locations/{id}", config: locationApi.update }, 
-  { method: "DELETE", path: "/api/locations", config: locationApi.deleteAll },
+  { method: "GET", path: "/api/locations", config: locationApi.find },
   { method: "GET", path: "/api/locations/{id}", config: locationApi.findOne },
+  { method: "PUT", path: "/api/locations/{id}", config: locationApi.update },
   { method: "DELETE", path: "/api/locations/{id}", config: locationApi.deleteOne },
-  // { method: "GET", path: "/api/locations/categories", config: locationApi.findCategories }, 
+  { method: "DELETE", path: "/api/locations", config: locationApi.deleteAll },
 
-  // Get locations by user
-  // { method: "GET", path: "/api/users/{id}/locations", config: locationApi.findByUser },
+  // Category Routes
+  { method: "GET", path: "/api/categories/games", config: gameApi.findCategories },
+  { method: "GET", path: "/api/categories/locations", config: locationApi.findCategories },
 
-  // Get games by location
-  { method: "GET", path: "/api/locations/{id}/games", config: gameApi.findByLocation },
+  // Relationship Management Routes
+  { method: "POST", path: "/api/locations/{locationId}/games/{gameId}", config: locationApi.addGameToLocation },
+  { method: "DELETE", path: "/api/locations/{locationId}/games/{gameId}", config: locationApi.removeGameFromLocation },
+  { method: "GET", path: "/api/locations/{id}/games", config: locationApi.findGamesByLocation },
+
+  // Geospatial Routes
+  // Find locations near a user
+  // { method: "GET", path: "/api/locations/near", config: locationApi.findLocationsNearUser },
 ];

@@ -32,8 +32,12 @@ export const locationMongoStore = {
   },
 
   async getLocationsByCategory(category) {
-    const locations = await Location.find({ category: category }).lean();
-    return locations;
+    try {
+      const locations = await Location.find({ category: category }).lean();
+      return locations;
+    } catch (error) {
+      return [];
+    }
   },
 
   async addLocation(location) {
