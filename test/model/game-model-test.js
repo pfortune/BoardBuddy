@@ -4,7 +4,6 @@ import { testLocations, testGames, dooleys, geoffs, chess, testUsers } from "../
 import { assertSubset } from "../test-utils.js";
 
 suite("Game Model tests", () => {
-
   let dooleysList = null;
 
   setup(async () => {
@@ -21,7 +20,7 @@ suite("Game Model tests", () => {
   test("create single game", async () => {
     const geoffsList = await db.locationStore.addLocation(geoffs);
     const game = await db.gameStore.addGame(geoffsList._id, chess)
-    assert.isNotNull(game._id);
+    assert.isDefined(game._id);
     assertSubset (chess, game);
   });
 

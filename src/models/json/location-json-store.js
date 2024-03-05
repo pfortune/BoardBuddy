@@ -1,3 +1,12 @@
+/**
+ * JSON-based storage for location data, supporting CRUD operations.
+ * Locations are uniquely identified using UUIDs. Integrates with gameJsonStore for related game data.
+ *
+ * @module locationJsonStore
+ * @author Peter Fortune
+ * @date 04/03/2024
+ */
+
 import { v4 } from "uuid";
 import { db } from "./store-utils.js";
 import { gameJsonStore } from "./game-json-store.js";
@@ -27,6 +36,11 @@ export const locationJsonStore = {
     return list;
   },
 
+  async getCategories() {
+    await db.read();
+    return db.data.locations.map((location) => location.category);
+  },
+  
   async getLocations(userid) {
     await db.read();
     return db.data.locations.filter((location) => location.userid === userid);

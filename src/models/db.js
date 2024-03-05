@@ -1,3 +1,13 @@
+/**
+ * Initialises data stores for users, locations, and games, supporting both JSON and MongoDB.
+ * Chooses the data store type based on the provided `storeType` argument.
+ *
+ * @module db
+ * @author Peter Fortune
+ * @date 04/03/2024
+ */
+
+
 import { userJsonStore } from "./json/user-json-store.js";
 import { locationJsonStore } from "./json/location-json-store.js";
 import { gameJsonStore } from "./json/game-json-store.js";

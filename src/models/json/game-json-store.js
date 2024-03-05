@@ -1,3 +1,12 @@
+/**
+ * JSON-based storage for game data, facilitating CRUD operations.
+ * Employs UUIDs for unique identification of games and links games to locations by location ID.
+ *
+ * @module gameJsonStore
+ * @author Peter Fortune
+ * @date 04/03/2024
+ */
+
 import { v4 } from "uuid";
 import { db } from "./store-utils.js";
 

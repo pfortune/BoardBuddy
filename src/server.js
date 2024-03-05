@@ -1,3 +1,14 @@
+/**
+ * Initialises and configures the Hapi server, integrating with various plugins for templating, authentication, and static file serving.
+ * Loads environment variables, sets up view rendering with Handlebars, configures session-based authentication,
+ * and initialises database connection. Routes for both web and API endpoints are registered here.
+ *
+ * @module ServerInitialisation
+ * @author Peter Fortune
+ * @date 04/03/2024
+ */
+
+
 import Vision from "@hapi/vision";
 import Hapi from "@hapi/hapi";
 import Cookie from "@hapi/cookie";
