@@ -81,8 +81,20 @@ export const locationApi = {
     auth: false,
     handler: async function (request, h) {
       try {
-        const categories = await db.locationStore.getCategories();
+        const categories = await db.locationStore.getLocationCategories();
         return h.response(categories).code(200);
+      } catch (err) {
+        return Boom.serverUnavailable("Database Error");
+      }
+    },
+  },
+
+  findLocationsByCategory: {
+    auth: false,
+    handler: async function (request, h) {
+      try {
+        const locations = await db.locationStore.getLocationsByCategory(request.params.category);
+        return h.response(locations).code(200);
       } catch (err) {
         return Boom.serverUnavailable("Database Error");
       }

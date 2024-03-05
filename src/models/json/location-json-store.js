@@ -36,6 +36,11 @@ export const locationJsonStore = {
     return list;
   },
 
+  async getCategories() {
+    await db.read();
+    return db.data.locations.map((location) => location.category);
+  },
+  
   async getLocations(userid) {
     await db.read();
     return db.data.locations.filter((location) => location.userid === userid);

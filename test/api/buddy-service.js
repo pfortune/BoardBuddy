@@ -89,8 +89,8 @@ export const buddyService = {
     return res.data;
   },
 
-  async getLocationsByCategory(id) {
-    const res = await axios.get(`${this.buddyUrl}/api/categories/${id}/locations`);
+  async getLocationsByCategory(category) {
+    const res = await axios.get(`${this.buddyUrl}/api/categories/${category}/locations`);
     return res.data;
   },
 

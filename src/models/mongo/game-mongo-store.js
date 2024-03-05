@@ -39,8 +39,7 @@ export const gameMongoStore = {
 
   async deleteGame(id) {
     try {
-      const deletedGame = await Game.deleteOne({ _id: id });
-      return h.response(deletedGame).code(204);
+      await Game.deleteOne({ _id: id });
     } catch (error) {
       console.log("bad id");
     }

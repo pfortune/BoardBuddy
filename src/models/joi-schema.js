@@ -29,6 +29,7 @@ export const GameSpec = {
   maxPlayers: Joi.number().required(),
   duration: Joi.number().required(),
   description: Joi.string().optional(),
+  category: Joi.string().optional(),
 };
 
 export const LocationSpec = {

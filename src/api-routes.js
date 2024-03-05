@@ -38,10 +38,13 @@ export const apiRoutes = [
   { method: "PUT", path: "/api/locations/{id}", config: locationApi.update },
   { method: "DELETE", path: "/api/locations/{id}", config: locationApi.deleteOne },
   { method: "DELETE", path: "/api/locations", config: locationApi.deleteAll },
+  
 
   // Category Routes
   { method: "GET", path: "/api/categories/games", config: gameApi.findCategories },
   { method: "GET", path: "/api/categories/locations", config: locationApi.findCategories },
+  { method: "GET", path: "/api/categories/{category}/locations", config: locationApi.findLocationsByCategory },
+
 
   // Relationship Management Routes
   { method: "POST", path: "/api/locations/{locationId}/games/{gameId}", config: locationApi.addGameToLocation },

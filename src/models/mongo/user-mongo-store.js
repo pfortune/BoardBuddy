@@ -8,8 +8,6 @@
  * @see User Model for user data structure.
  */
 
-
-import { get } from "mongoose";
 import { User } from "./user.js";
 
 export const userMongoStore = {

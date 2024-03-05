@@ -58,14 +58,24 @@ suite("Game API tests", () => {
     assert.equal(gamesAfterDelete.length, testGames.length - 1);
   });
 
-  test("get a game - bad params", async () => {
+  test("get a game - bad id", async () => {
+    try {
+      const returnedGame = await buddyService.getGame("1234");
+      assert.fail("Should not return a response");
+    } catch (error) {
+      assert(error.response.data.message === "No Game with this id");
+      assert.equal(error.response.data.statusCode, 503);
+    }
+  });
+
+  test("get a game - deleted game", async () => {
     await buddyService.deleteGame(testGames[1]._id);
     try {
       const returnedGame = await buddyService.getGame(testGames[1]._id);
       assert.fail("Should not return a response");
     } catch (error) {
       assert(error.response.data.message === "No Game with this id");
-      assert.equal(error.response.data.statusCode, 503);
+      assert.equal(error.response.data.statusCode, 404);
     }
   });
 

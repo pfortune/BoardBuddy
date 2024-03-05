@@ -48,7 +48,7 @@ export const gameApi = {
       try {
         const game = await db.gameStore.getGameById(request.params.id);
         if (!game) {
-          return Boom.notFound("Game not found");
+          return Boom.notFound("No Game with this id");
         }
         return game;
       } catch (err) {
