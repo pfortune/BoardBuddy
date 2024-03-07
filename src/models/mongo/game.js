@@ -18,10 +18,10 @@ const gameSchema = new Schema({
     duration: Number,
     description: String,
     category: String,
-    locations: [{
+    locationid: {
         type: Schema.Types.ObjectId,
         ref: "Location"
-    }]
+    }
 });
 
 export const Game = Mongoose.model("Game", gameSchema);

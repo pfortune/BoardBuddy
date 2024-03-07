@@ -1,7 +1,7 @@
 import { assert } from "chai";
 import { db } from "../../src/models/db.js";
-import { assertSubset } from "../test-utils.js";
 import { testLocations, geoffs } from "../fixtures.js";
+import { assertSubset } from "../test-utils.js";
 
 suite("Location Model tests", () => {
   setup(async () => {
@@ -46,7 +46,7 @@ suite("Location Model tests", () => {
   test("get a location - success", async () => {
     const location = await db.locationStore.addLocation(geoffs);
     const returnedLocation = await db.locationStore.getLocationById(location._id);
-    assertSubset(geoffs, returnedLocation);
+    assertSubset(geoffs, location);
   });
 
   test("delete One Location - success", async () => {

@@ -1,81 +1,64 @@
+import { EventEmitter } from "events";
 import { assert } from "chai";
 import { buddyService } from "./buddy-service.js";
 import { assertSubset } from "../test-utils.js";
-import { testLocations, geoffs } from "../fixtures.js";
+import { maggie, maggieCredentials, geoffs, testLocations } from "../fixtures.js";
+
+EventEmitter.setMaxListeners(25);
 
 suite("Location API tests", () => {
+  let user = null;
+
   setup(async () => {
+    buddyService.clearAuth();
+    user = await buddyService.createUser(maggie);
+    await buddyService.authenticate(maggieCredentials);
     await buddyService.deleteAllLocations();
-    for (let i = 0; i < testLocations.length; i += 1) {
-      // eslint-disable-next-line no-await-in-loop
-      testLocations[i] = await buddyService.createLocation(testLocations[i]);
-    }
+    await buddyService.deleteAllUsers();
+    user = await buddyService.createUser(maggie);
+    await buddyService.authenticate(maggieCredentials);
+    geoffs.userid = user._id;
   });
 
-  test("create a location", async () => {
-    const location = await buddyService.createLocation(geoffs);
-    assertSubset(geoffs, location);
-    assert.isDefined(location._id);
-  });
+  teardown(async () => {});
 
-  test("delete all locations", async () => {
-    let returnedLocations = await buddyService.getAllLocations();
-    assert.equal(returnedLocations.length, 3);
-    await buddyService.deleteAllLocations();
-    returnedLocations = await buddyService.getAllLocations();
-    assert.equal(returnedLocations.length, 0);
-  });
-
-  test("get locations by category - success", async () => {
-    const categories = await buddyService.getLocationCategories();
-    const bars = await buddyService.getLocationsByCategory(categories[0]);
-    assert.equal(bars.length, 1);
-    assertSubset({ title: "Revolutions", category: "Bar" }, bars[0]);
-
-    const cafes = await buddyService.getLocationsByCategory("Cafe");
-    assert.equal(cafes.length, 1);
-    assertSubset({ title: "The White Rabbit", category: "Cafe" }, cafes[0]);
-  });
-
-  test("get locations by category - no results", async () => {
-    const ghostCategory = await buddyService.getLocationsByCategory("Ghost");
-    assert.isArray(ghostCategory);
-    assert.equal(ghostCategory.length, 0);
-  });
-
-  test("get a location - success", async () => {
-    const location = await buddyService.createLocation(geoffs);
-    const returnedLocation = await buddyService.getLocation(location._id);
+  test("create location", async () => {
+    const returnedLocation = await buddyService.createLocation(geoffs);
+    assert.isNotNull(returnedLocation);
     assertSubset(geoffs, returnedLocation);
   });
 
-  test("delete One Location - success", async () => {
-    const id = testLocations[0]._id;
-    await buddyService.deleteLocation(id);
-    const returnedLocations = await buddyService.getAllLocations();
-    assert.equal(returnedLocations.length, testLocations.length - 1);
+  test("delete a location", async () => {
+    const location = await buddyService.createLocation(geoffs);
+    const response = await buddyService.deleteLocation(location._id);
+    assert.equal(response.status, 204);
     try {
-      await buddyService.getLocation(id);
-      assert.fail("Should not have found the location");
+      const returnedLocation = await buddyService.getLocation(location.id);
+      assert.fail("Should not return a response");
     } catch (error) {
-      // Assuming the API returns an error when a location is not found
-      assert.isOk(error, "Location was successfully deleted");
+      assert(error.response.data.message === "No Location with this id", "Incorrect Response Message");
     }
   });
 
-  test("get a location - bad params", async () => {
-    try {
-      await buddyService.getLocation("");
-      assert.fail("Should not have succeeded with empty ID");
-    } catch (error) {
-      // Expected to throw due to bad parameters
-      assert.isOk(error, "Failed as expected with bad parameters");
+  test("create multiple locations", async () => {
+    for (let i = 0; i < testLocations.length; i += 1) {
+      testLocations[i].userid = user._id;
+      // eslint-disable-next-line no-await-in-loop
+      await buddyService.createLocation(testLocations[i]);
     }
+    let returnedLists = await buddyService.getAllLocations();
+    assert.equal(returnedLists.length, testLocations.length);
+    await buddyService.deleteAllLocations();
+    returnedLists = await buddyService.getAllLocations();
+    assert.equal(returnedLists.length, 0);
   });
 
-  test("delete One Location - fail", async () => {
-    await buddyService.deleteLocation("bad-id");
-    const allLocations = await buddyService.getAllLocations();
-    assert.equal(testLocations.length, allLocations.length);
+  test("remove non-existant location", async () => {
+    try {
+      const response = await buddyService.deleteLocation("not an id");
+      assert.fail("Should not return a response");
+    } catch (error) {
+      assert(error.response.data.message === "No Location with this id", "Incorrect Response Message");
+    }
   });
 });

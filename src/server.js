@@ -8,20 +8,22 @@
  * @date 04/03/2024
  */
 
+import Inert from "@hapi/inert";
 import Vision from "@hapi/vision";
 import Hapi from "@hapi/hapi";
 import Cookie from "@hapi/cookie";
-import Inert from "@hapi/inert";
 import dotenv from "dotenv";
 import path from "path";
 import Joi from "joi";
+import jwt from "hapi-auth-jwt2";
 import HapiSwagger from "hapi-swagger";
 import { fileURLToPath } from "url";
 import Handlebars from "handlebars";
 import { webRoutes } from "./web-routes.js";
-import { apiRoutes } from "./api-routes.js";
 import { db } from "./models/db.js";
 import { accountsController } from "./controllers/accounts-controller.js";
+import { validate } from "./api/jwt-utils.js";
+import { apiRoutes } from "./api-routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -34,9 +36,17 @@ if (result.error) {
 
 const swaggerOptions = {
   info: {
-    title: "BoardBuddy API",
-    version: "0.3",
+    title: "Buddy API",
+    version: "0.4",
   },
+  securityDefinitions: {
+    jwt: {
+      type: "apiKey",
+      name: "Authorization",
+      in: "header",
+    },
+  },
+  security: [{ jwt: [] }],
 };
 
 async function init() {
@@ -44,15 +54,18 @@ async function init() {
     port: process.env.PORT || 3000,
   });
 
+  await server.register(Cookie);
+  await server.register(jwt);
+
   await server.register([
-    Vision,
-    Cookie,
     Inert,
+    Vision,
     {
       plugin: HapiSwagger,
       options: swaggerOptions,
     },
   ]);
+
   server.validator(Joi);
 
   server.views({
@@ -75,6 +88,11 @@ async function init() {
     },
     redirectTo: "/",
     validate: accountsController.validate,
+  });
+  server.auth.strategy("jwt", "jwt", {
+    key: process.env.cookie_password,
+    validate: validate,
+    verifyOptions: { algorithms: ["HS256"] },
   });
   server.auth.default("session");
 

@@ -1,13 +1,56 @@
 import Boom from "@hapi/boom";
 import { db } from "../models/db.js";
+import { IdSpec, GameSpec, GameSpecPlus, GameArraySpec } from "../models/joi-schemas.js";
+import { validationError } from "./logger.js";
 
 export const gameApi = {
-  create: {
-    auth: false,
+  find: {
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function (request, h) {
       try {
-        const { locationId } = request.params;
-        const game = await db.gameStore.addGame(locationId, request.payload);
+        const games = await db.gameStore.getAllGames();
+        return games;
+      } catch (err) {
+        return Boom.serverUnavailable("Database Error");
+      }
+    },
+    tags: ["api"],
+    response: { schema: GameArraySpec, failAction: validationError },
+    description: "Get all gameApi",
+    notes: "Returns all gameApi",
+  },
+
+  findOne: {
+    auth: {
+      strategy: "jwt",
+    },
+    async handler(request) {
+      try {
+        const game = await db.gameStore.getGameById(request.params.id);
+        if (!game) {
+          return Boom.notFound("No game with this id");
+        }
+        return game;
+      } catch (err) {
+        return Boom.serverUnavailable("No game with this id");
+      }
+    },
+    tags: ["api"],
+    description: "Find a Game",
+    notes: "Returns a game",
+    validate: { params: { id: IdSpec }, failAction: validationError },
+    response: { schema: GameSpecPlus, failAction: validationError },
+  },
+
+  create: {
+    auth: {
+      strategy: "jwt",
+    },
+    handler: async function (request, h) {
+      try {
+        const game = await db.gameStore.addGame(request.params.id, request.payload);
         if (game) {
           return h.response(game).code(201);
         }
@@ -16,93 +59,47 @@ export const gameApi = {
         return Boom.serverUnavailable("Database Error");
       }
     },
-  },
-
-  update: {
-    auth: false,
-    handler: async function (request, h) {
-      try {
-        await db.gameStore.updateGame({ _id: request.params.id }, request.payload);
-        return h.response().code(204);
-      } catch (err) {
-        return Boom.serverUnavailable("No Game with this id");
-      }
-    },
+    tags: ["api"],
+    description: "Create a game",
+    notes: "Returns the newly created game",
+    validate: { payload: GameSpec },
+    response: { schema: GameSpecPlus, failAction: validationError },
   },
 
   deleteAll: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function (request, h) {
       try {
         await db.gameStore.deleteAllGames();
         return h.response().code(204);
       } catch (err) {
-        return Boom.serverUnavailable("No Game with this id");
+        return Boom.serverUnavailable("Database Error");
       }
     },
+    tags: ["api"],
+    description: "Delete all gameApi",
   },
 
-  findOne: {
-    auth: false,
+  deleteOne: {
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function (request, h) {
       try {
         const game = await db.gameStore.getGameById(request.params.id);
         if (!game) {
           return Boom.notFound("No Game with this id");
         }
-        return game;
+        await db.gameStore.deleteGame(game._id);
+        return h.response().code(204);
       } catch (err) {
         return Boom.serverUnavailable("No Game with this id");
       }
     },
-  },
-
-  deleteOne: {
-    auth: false,
-    handler: async function (request, h) {
-      try {
-        const deletedGame = await db.gameStore.deleteGame(request.params.id);
-        return h.response(deletedGame).code(204);
-      } catch (err) {
-        return Boom.serverUnavailable("No Game with this id");
-      }
-    },
-  },
-
-  find: {
-    auth: false,
-    handler: async function (request, h) {
-      try {
-        const games = await db.gameStore.getAllGames();
-        return h.response(games).code(200);
-      } catch (err) {
-        return Boom.serverUnavailable("No Games found");
-      }
-    },
-  },
-
-  findByLocation: {
-    auth: false,
-    handler: async function (request, h) {
-      try {
-        const games = await db.gameStore.getGamesByLocationId(request.params.locationId);
-        return h.response(games).code(200);
-      } catch (err) {
-        return Boom.serverUnavailable("No games found for this location");
-      }
-    },
-  },
-
-  findCategories: {
-    auth: false,
-    handler: async function (request, h) {
-      try {
-        const games = await db.gameStore.getAllGames();
-        const categories = games.map((game) => game.category);
-        return h.response(categories).code(200);
-      } catch (err) {
-        return Boom.serverUnavailable("No games found");
-      }
-    },
+    tags: ["api"],
+    description: "Delete a game",
+    validate: { params: { id: IdSpec }, failAction: validationError },
   },
 };

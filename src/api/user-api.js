@@ -1,9 +1,50 @@
 import Boom from "@hapi/boom";
 import { db } from "../models/db.js";
-import { UserArray, UserSpec, IdSpec } from "../models/joi-schema.js";
+import { UserCredentialsSpec, UserSpec, UserSpecPlus, IdSpec, UserArray, JwtAuth } from "../models/joi-schemas.js";
 import { validationError } from "./logger.js";
+import { createToken } from "./jwt-utils.js";
 
 export const userApi = {
+  find: {
+    auth: {
+      strategy: "jwt",
+    },
+    handler: async function (request, h) {
+      try {
+        const users = await db.userStore.getAllUsers();
+        return users;
+      } catch (err) {
+        return Boom.serverUnavailable("Database Error");
+      }
+    },
+    tags: ["api"],
+    description: "Get all userApi",
+    notes: "Returns details of all userApi",
+    response: { schema: UserArray, failAction: validationError },
+  },
+
+  findOne: {
+    auth: {
+      strategy: "jwt",
+    },
+    handler: async function (request, h) {
+      try {
+        const user = await db.userStore.getUserById(request.params.id);
+        if (!user) {
+          return Boom.notFound("No User with this id");
+        }
+        return user;
+      } catch (err) {
+        return Boom.serverUnavailable("No User with this id");
+      }
+    },
+    tags: ["api"],
+    description: "Get a specific user",
+    notes: "Returns user details",
+    validate: { params: { id: IdSpec }, failAction: validationError },
+    response: { schema: UserSpecPlus, failAction: validationError },
+  },
+
   create: {
     auth: false,
     handler: async function (request, h) {
@@ -18,68 +59,16 @@ export const userApi = {
       }
     },
     tags: ["api"],
-    description: "Create a new user",
-    notes: "Returns the created user details",
-    validate: {
-      payload: UserSpec,
-      failAction: validationError,
-    },
-    response: {
-      schema: UserSpec,
-      failAction: validationError,
-    },
-  },
-
-  find: {
-    auth: false,
-    handler: async function (request, h) {
-      try {
-        const users = await db.userStore.getAllUsers();
-        return users;
-      } catch (err) {
-        return Boom.serverUnavailable("Database Error");
-      }
-    },
-    tags: ["api"],
-    description: "Get all users",
-    notes: "Returns details of all users",
-    response: {
-      schema: UserArray,
-      failAction: validationError,
-    },
-  },
-
-  update: {
-    auth: false,
-    handler: async function (request, h) {
-      try {
-        const user = await db.userStore.getUserById(request.params.id);
-        if (!user) {
-          return Boom.notFound("No User with this id");
-        }
-
-        const updatedUser = await db.userStore.updateUser({ _id: request.params.id }, request.payload);
-        return h.response(updatedUser).code(200);
-      } catch (err) {
-        return Boom.serverUnavailable("Database Error");
-      }
-    },
-    tags: ["api"],
-    description: "Update a user by ID",
-    notes: "Updates user details and returns the updated user",
-    validate: {
-      params: { id: IdSpec },
-      payload: UserSpec,
-      failAction: validationError,
-    },
-    response: {
-      schema: UserSpec,
-      failAction: validationError,
-    },
+    description: "Create a User",
+    notes: "Returns the newly created user",
+    validate: { payload: UserSpec, failAction: validationError },
+    response: { schema: UserSpecPlus, failAction: validationError },
   },
 
   deleteAll: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function (request, h) {
       try {
         await db.userStore.deleteAll();
@@ -89,71 +78,52 @@ export const userApi = {
       }
     },
     tags: ["api"],
-    description: "Delete all users",
-    notes: "Deletes all users from the database",
-  },
-
-  findOne: {
-    auth: false,
-    handler: async function (request, h) {
-      try {
-        const user = await db.userStore.getUserById(request.params.id);
-        if (!user) {
-          return Boom.notFound("No User with this id");
-        }
-        return user;
-      } catch (err) {
-        return Boom.serverUnavailable("No User with this id - service unavailable");
-      }
-    },
-    tags: ["api"],
-    description: "Get a user by ID",
-    notes: "Returns user details for the specified ID",
-    validate: { params: { id: IdSpec }, failAction: validationError },
-    response: { schema: UserSpec, failAction: validationError },
+    description: "Delete all userApi",
+    notes: "All userApi removed from Board Buddy",
   },
 
   deleteOne: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function (request, h) {
       try {
         const user = await db.userStore.getUserById(request.params.id);
         if (!user) {
           return Boom.notFound("No User with this id");
         }
-        await db.userStore.deleteUserById(request.params.id);
-
+        await db.userStore.deleteLocationById(user._id);
         return h.response().code(204);
       } catch (err) {
-        return Boom.serverUnavailable("No User with this id - service unavailable");
+        return Boom.serverUnavailable("No User with this id");
       }
     },
     tags: ["api"],
-    description: "Delete a user by ID",
-    notes: "Deletes a single user based on the ID provided",
+    description: "Delete a User",
     validate: { params: { id: IdSpec }, failAction: validationError },
   },
 
-  findLocationsByUser: {
+  authenticate: {
     auth: false,
     handler: async function (request, h) {
       try {
-        const user = await db.userStore.getUserById(request.params.id);
+        const user = await db.userStore.getUserByEmail(request.payload.email);
         if (!user) {
-          return Boom.notFound("No User with this id");
+          return Boom.unauthorized("User not found");
         }
-        const locations = await db.locationStore.getLocationsByUser(user._id);
-        return locations;
+        if (user.password !== request.payload.password) {
+          return Boom.unauthorized("Invalid password");
+        }
+        const token = createToken(user);
+        return h.response({ success: true, token: token }).code(201);
       } catch (err) {
         return Boom.serverUnavailable("Database Error");
       }
     },
     tags: ["api"],
-    description: "Find locations by User ID",
-    notes: "Returns a list of locations associated with the user ID",
-    validate: {
-      params: { id: IdSpec },
-      failAction: validationError,
-    },
+    description: "Authenticate  a User",
+    notes: "If user has valid email/password, create and return a JWT token",
+    validate: { payload: UserCredentialsSpec, failAction: validationError },
+    response: { schema: JwtAuth, failAction: validationError },
   },
 };

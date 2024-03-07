@@ -27,35 +27,22 @@ export const gameJsonStore = {
 
   async getGamesByLocationId(id) {
     await db.read();
-    let foundGames = db.data.games.filter((game) => game.locationid === id);
-    if(!foundGames) {
-      foundGames = null;
-    }
-    return foundGames;
-  },
-
-  async getLocationGames(locationId) {
-    await db.read();
-    let foundGames = db.data.games.filter((game) => game.locationid === locationId);
-    if(!foundGames) {
-      foundGames = null;
-    }
-    return foundGames;
+    let t = db.data.games.filter((game) => game.locationid === id);
+    if (t === undefined) t = null;
+    return t;
   },
 
   async getGameById(id) {
     await db.read();
-    let foundGame = db.data.games.find((game) => game._id === id);
-    if(!foundGame) {
-      foundGame = null;
-    }
-    return foundGame;
+    let t = db.data.games.find((game) => game._id === id);
+    if (t === undefined) t = null;
+    return t;
   },
 
   async deleteGame(id) {
     await db.read();
     const index = db.data.games.findIndex((game) => game._id === id);
-    if(index !== -1) db.data.games.splice(index, 1);
+    if (index !== -1) db.data.games.splice(index, 1);
     await db.write();
   },
 

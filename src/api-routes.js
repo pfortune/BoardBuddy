@@ -14,40 +14,33 @@ import { locationApi } from "./api/location-api.js";
 
 export const apiRoutes = [
   // User Routes
-  { method: "POST", path: "/api/users", config: userApi.create },
   { method: "GET", path: "/api/users", config: userApi.find },
-  { method: "PUT", path: "/api/users/{id}", config: userApi.update },
+  { method: "POST", path: "/api/users", config: userApi.create },
   { method: "DELETE", path: "/api/users", config: userApi.deleteAll },
   { method: "GET", path: "/api/users/{id}", config: userApi.findOne },
   { method: "DELETE", path: "/api/users/{id}", config: userApi.deleteOne },
-  { method: "GET", path: "/api/users/{id}/locations", config: userApi.findLocationsByUser },
+  // { method: "GET", path: "/api/users/{id}/locations", config: userApi.findLocationsByUser },
+
+  { method: "POST", path: "/api/users/authenticate", config: userApi.authenticate },
 
   // Game Routes
-  { method: "POST", path: "/api/games", config: gameApi.create },
-  { method: "PUT", path: "/api/games/{id}", config: gameApi.update },
-  { method: "DELETE", path: "/api/games", config: gameApi.deleteAll },
-  { method: "GET", path: "/api/games/{id}", config: gameApi.findOne },
-  { method: "DELETE", path: "/api/games/{id}", config: gameApi.deleteOne },
   { method: "GET", path: "/api/games", config: gameApi.find },
-  { method: "GET", path: "/api/games/{id}/locations", config: gameApi.findByLocation },
+  { method: "GET", path: "/api/games/{id}", config: gameApi.findOne },
+  { method: "POST", path: "/api/locations/{id}/games", config: gameApi.create },
+  { method: "DELETE", path: "/api/games", config: gameApi.deleteAll },
+  { method: "DELETE", path: "/api/games/{id}", config: gameApi.deleteOne },
 
   // Location Routes
   { method: "POST", path: "/api/locations", config: locationApi.create },
+  { method: "DELETE", path: "/api/locations", config: locationApi.deleteAll },
   { method: "GET", path: "/api/locations", config: locationApi.find },
   { method: "GET", path: "/api/locations/{id}", config: locationApi.findOne },
-  { method: "PUT", path: "/api/locations/{id}", config: locationApi.update },
   { method: "DELETE", path: "/api/locations/{id}", config: locationApi.deleteOne },
-  { method: "DELETE", path: "/api/locations", config: locationApi.deleteAll },
 
   // Category Routes
-  { method: "GET", path: "/api/categories/games", config: gameApi.findCategories },
-  { method: "GET", path: "/api/categories/locations", config: locationApi.findCategories },
-  { method: "GET", path: "/api/categories/{category}/locations", config: locationApi.findLocationsByCategory },
-
-  // Relationship Management Routes
-  { method: "POST", path: "/api/locations/{locationId}/games/{gameId}", config: locationApi.addGameToLocation },
-  { method: "DELETE", path: "/api/locations/{locationId}/games/{gameId}", config: locationApi.removeGameFromLocation },
-  { method: "GET", path: "/api/locations/{id}/games", config: locationApi.findGamesByLocation },
+  // { method: "GET", path: "/api/categories/games", config: gameApi.findCategories },
+  // { method: "GET", path: "/api/categories/locations", config: locationApi.findCategories },
+  // { method: "GET", path: "/api/categories/{category}/locations", config: locationApi.findLocationsByCategory },
 
   // Geospatial Routes
   // Find locations near a user
