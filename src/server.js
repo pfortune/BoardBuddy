@@ -30,6 +30,7 @@ import { apiRoutes } from "./api-routes.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+
 if (process.env.NODE_ENV !== "production") {
   const result = dotenv.config();
   if (result.error) {
