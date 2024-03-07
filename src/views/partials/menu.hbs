@@ -7,9 +7,9 @@
       <div class="navbar-item">
         <div class="buttons">
           <!-- if user.permission is set to admin show admin links -->
-          {{#if user.permission}}
+          {{#isEqual user.permission "ADMIN"}}
             <a id="admin" class="button" href="/admin"> Admin </a>
-          {{/if}}
+          {{/isEqual}}
           <a id="dashboard" class="button" href="/dashboard"> Dashboard </a>
           <a id="search" class="button" href="/search"> Search </a>
           <a id="about" class="button" href="/about"> About </a>
