@@ -5,7 +5,14 @@ export const dashboardController = {
   index: {
     handler: async function (request, h) {
       const loggedInUser = request.auth.credentials;
-      const locations = await db.locationStore.getLocations(loggedInUser._id);
+
+      let locations;
+      if (loggedInUser.permission === "ADMIN") {
+        locations = await db.locationStore.getAllLocations();
+      } else {
+        locations = await db.locationStore.getLocations(loggedInUser._id);
+      }
+
       const viewData = {
         title: "Buddy Dashboard",
         user: loggedInUser,
@@ -14,7 +21,7 @@ export const dashboardController = {
       return h.view("dashboard-view", viewData);
     },
   },
-  
+
   addLocation: {
     validate: {
       payload: LocationSpec,
