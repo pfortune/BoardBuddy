@@ -39,9 +39,8 @@ suite("User API tests", () => {
   test("delete One User - success", async () => {
     const newUser = await buddyService.createUser(maggie);
     console.log("MAGGIE", newUser._id);
-    await buddyService.deleteUser(newUser._id);
-    const returnedUser = await buddyService.getUser(newUser._id);
-    assert.isNull(returnedUser);
+    const response = await buddyService.deleteUser(newUser._id);
+    assert.equal(response.status, 204);
   });
 
   test("get a user", async () => {

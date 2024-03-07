@@ -25,7 +25,7 @@ export const buddyService = {
 
   async deleteUser(id) {
     const res = await axios.delete(`${this.buddyUrl}/api/users/${id}`);
-    return res.data;
+    return res;
   },
 
   async deleteAllUsers() {
