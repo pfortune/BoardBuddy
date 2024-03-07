@@ -51,6 +51,11 @@ export const accountsController = {
         return h.redirect("/");
       }
       request.cookieAuth.set({ id: user._id });
+
+      if(user.permission === "ADMIN"){
+        return h.redirect("/admin");
+      }
+      
       return h.redirect("/dashboard");
     },
   },
