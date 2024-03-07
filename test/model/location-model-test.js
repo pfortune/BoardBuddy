@@ -1,10 +1,11 @@
 import { assert } from "chai";
-import { db } from "../src/models/db.js";
-import { testLocations, geoffs } from "./fixtures.js";
+import { db } from "../../src/models/db.js";
+import { testLocations, geoffs } from "../fixtures.js";
+import { assertSubset } from "../test-utils.js";
 
 suite("Location Model tests", () => {
   setup(async () => {
-    db.init("json");
+    db.init("mongo");
     await db.locationStore.deleteAllLocations();
     for (let i = 0; i < testLocations.length; i += 1) {
       // eslint-disable-next-line no-await-in-loop
@@ -14,7 +15,7 @@ suite("Location Model tests", () => {
 
   test("create a location", async () => {
     const location = await db.locationStore.addLocation(geoffs);
-    assert.equal(geoffs, location);
+    assertSubset(geoffs, location);
     assert.isDefined(location._id);
   });
 
@@ -26,10 +27,26 @@ suite("Location Model tests", () => {
     assert.equal(returnedLocations.length, 0);
   });
 
+  test("get locations by category - success", async () => {
+    const bars = await db.locationStore.getLocationsByCategory("Bar");
+    assert.equal(bars.length, 1);
+    assertSubset({ title: "Revolutions", category: "Bar" }, bars[0]);
+
+    const cafes = await db.locationStore.getLocationsByCategory("Cafe");
+    assert.equal(cafes.length, 1);
+    assertSubset({ title: "The White Rabbit", category: "Cafe" }, cafes[0]);
+  });
+
+  test("get locations by category - no results", async () => {
+    const ghostCategory = await db.locationStore.getLocationsByCategory("Ghost");
+    assert.isArray(ghostCategory);
+    assert.equal(ghostCategory.length, 0);
+  });
+
   test("get a location - success", async () => {
     const location = await db.locationStore.addLocation(geoffs);
     const returnedLocation = await db.locationStore.getLocationById(location._id);
-    assert.equal(geoffs, location);
+    assertSubset(geoffs, location);
   });
 
   test("delete One Location - success", async () => {
