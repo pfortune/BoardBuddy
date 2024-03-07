@@ -30,7 +30,6 @@ import { apiRoutes } from "./api-routes.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-
 if (process.env.NODE_ENV !== "production") {
   const result = dotenv.config();
   if (result.error) {
@@ -38,7 +37,6 @@ if (process.env.NODE_ENV !== "production") {
     process.exit(1);
   }
 }
-
 
 const swaggerOptions = {
   info: {
@@ -93,29 +91,36 @@ async function init() {
 
   server.auth.strategy("session", "cookie", {
     cookie: {
-      name: process.env.cookie_name,
-      password: process.env.cookie_password,
+      name: process.env.COOKIE_NAME,
+      password: process.env.COOKIE_PASSWORD,
       isSecure: false,
     },
     redirectTo: "/",
     validate: accountsController.validate,
   });
   server.auth.strategy("jwt", "jwt", {
-    key: process.env.cookie_password,
+    key: process.env.COOKIE_PASSWORD,
     validate: validate,
     verifyOptions: { algorithms: ["HS256"] },
   });
   server.auth.default("session");
 
   server.ext("onPreResponse", (request, h) => {
-    const {response} = request;
+    const { response } = request;
+  
     if (response.isBoom && response.output.statusCode === 403) {
-      // Redirect non-admin users trying to access admin pages
       return h.redirect("/dashboard").takeover();
     }
+  
+    if (response.variety === "view") {
+      if (request.auth.isAuthenticated) {
+        response.source.context.user = request.auth.credentials;
+      }
+    }
+  
     return h.continue;
   });
-
+   
   db.init("mongo");
   server.route(webRoutes);
   server.route(apiRoutes);
