@@ -17,7 +17,6 @@ index: {
     handler: async function (request, h) {
       const loggedInUser = request.auth.credentials;
       const locations = await db.locationStore.getLocationsByCategory(request.params.category);
-      console.log(locations);
       const viewData = {
         title: "Board Buddy Search Results",
         user: loggedInUser,
