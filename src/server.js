@@ -103,6 +103,15 @@ async function init() {
   });
   server.auth.default("session");
 
+  server.ext("onPreResponse", (request, h) => {
+    const {response} = request;
+    if (response.isBoom && response.output.statusCode === 403) {
+      // Redirect non-admin users trying to access admin pages
+      return h.redirect("/dashboard").takeover();
+    }
+    return h.continue;
+  });
+
   db.init("mongo");
   server.route(webRoutes);
   server.route(apiRoutes);
