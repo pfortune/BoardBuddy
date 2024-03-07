@@ -1,5 +1,5 @@
 import axios from "axios";
-import { serviceUrl } from "../fixtures.js";
+import { maggie, serviceUrl } from "../fixtures.js";
 
 export const buddyService = {
   buddyUrl: serviceUrl,
@@ -14,9 +14,13 @@ export const buddyService = {
     return res.data;
   },
 
-  async updateUser(id, user) {
-    const res = await axios.put(`${this.buddyUrl}/api/users/${id}`, user);
-    return res.data;
+  async getAllUsers() {
+    try {
+      const res = await axios.get(`${this.buddyUrl}/api/users`);
+      return res.data;
+    } catch (e) {
+      return null;
+    }
   },
 
   async deleteUser(id) {
@@ -29,18 +33,38 @@ export const buddyService = {
     return res.data;
   },
 
-  async getAllUsers() {
-    const res = await axios.get(`${this.buddyUrl}/api/users`);
+  async createLocation(location) {
+    const res = await axios.post(`${this.buddyUrl}/api/locations`, location);
     return res.data;
   },
 
-  async createGame(game) {
-    const res = await axios.post(`${this.buddyUrl}/api/games`, game);
+  async deleteAllLocations() {
+    const response = await axios.delete(`${this.buddyUrl}/api/locations`);
+    return response.data;
+  },
+
+  async deleteLocation(id) {
+    const response = await axios.delete(`${this.buddyUrl}/api/locations/${id}`);
+    return response;
+  },
+
+  async getAllLocations() {
+    const res = await axios.get(`${this.buddyUrl}/api/locations`);
     return res.data;
   },
 
-  async updateGame(id, game) {
-    const res = await axios.put(`${this.buddyUrl}/api/games/${id}`, game);
+  async getLocation(id) {
+    const res = await axios.get(`${this.buddyUrl}/api/locations/${id}`);
+    return res.data;
+  },
+
+  async getAllGames() {
+    const res = await axios.get(`${this.buddyUrl}/api/games`);
+    return res.data;
+  },
+
+  async createGame(id, game) {
+    const res = await axios.post(`${this.buddyUrl}/api/locations/${id}/games`, game);
     return res.data;
   },
 
@@ -59,28 +83,8 @@ export const buddyService = {
     return res.data;
   },
 
-  async getAllGames() {
-    const res = await axios.get(`${this.buddyUrl}/api/games`);
-    return res.data;
-  },
-
-  async createLocation(location) {
-    const res = await axios.post(`${this.buddyUrl}/api/locations`, location);
-    return res.data;
-  },
-
-  async getAllLocations() {
-    const res = await axios.get(`${this.buddyUrl}/api/locations`);
-    return res.data;
-  },
-
-  async getLocation(id) {
-    const res = await axios.get(`${this.buddyUrl}/api/locations/${id}`);
-    return res.data;
-  },
-
-  async updateLocation(id, location) {
-    const res = await axios.put(`${this.buddyUrl}/api/locations/${id}`, location);
+  async getLocationsByCategory(category) {
+    const res = await axios.get(`${this.buddyUrl}/api/categories/${category}/locations`);
     return res.data;
   },
 
@@ -89,43 +93,18 @@ export const buddyService = {
     return res.data;
   },
 
-  async getLocationsByCategory(category) {
-    const res = await axios.get(`${this.buddyUrl}/api/categories/${category}/locations`);
-    return res.data;
-  },
-
-  async getGamesByLocation(id) {
-    const res = await axios.get(`${this.buddyUrl}/api/locations/${id}/games`);
-    return res.data;
-  },
-
-  async getLocationsByGame(id) {
-    const res = await axios.get(`${this.buddyUrl}/api/games/${id}/locations`);
-    return res.data;
-  },
-
-  async deleteLocation(id) {
-    const res = await axios.delete(`${this.buddyUrl}/api/locations/${id}`);
-    return res.data;
-  },
-
-  async removeGameFromLocation(locationId, gameId) {
-    const res = await axios.delete(`${this.buddyUrl}/api/locations/${locationId}/games/${gameId}`);
-    return res.data;
-  },
-
-  async deleteAllLocations() {
-    const res = await axios.delete(`${this.buddyUrl}/api/locations`);
-    return res.data;
-  },
-
-  async getGameCategories() {
-    const res = await axios.get(`${this.buddyUrl}/api/categories/games`);
-    return res.data;
-  },
-
   async getLocationCategories() {
     const res = await axios.get(`${this.buddyUrl}/api/categories/locations`);
     return res.data;
+  },
+
+  async authenticate(user) {
+    const response = await axios.post(`${this.buddyUrl}/api/users/authenticate`, user);
+    axios.defaults.headers.common.Authorization = `Bearer ${response.data.token}`;
+    return response.data;
+  },
+
+  async clearAuth() {
+    axios.defaults.headers.common.Authorization = "";
   },
 };

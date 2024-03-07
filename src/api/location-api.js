@@ -1,72 +1,97 @@
 import Boom from "@hapi/boom";
+import { IdSpec, LocationArraySpec, LocationSpec, LocationSpecPlus } from "../models/joi-schemas.js";
 import { db } from "../models/db.js";
+import { validationError } from "./logger.js";
 
 export const locationApi = {
-  create: {
-    auth: false,
-    handler: async function (request, h) {
-      try {
-        const location = await db.locationStore.addLocation(request.payload);
-        return h.response(location).code(201);
-      } catch (err) {
-        return Boom.serverUnavailable("Database Error");
-      }
-    },
-  },
-
   find: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function (request, h) {
       try {
         const locations = await db.locationStore.getAllLocations();
-        return h.response(locations).code(200);
+        return locations;
       } catch (err) {
         return Boom.serverUnavailable("Database Error");
       }
     },
+    tags: ["api"],
+    response: { schema: LocationArraySpec, failAction: validationError },
+    description: "Get all locations",
+    notes: "Returns all locations",
   },
 
   findOne: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
+    async handler(request) {
+      try {
+        const location = await db.locationStore.getLocationById(request.params.id);
+        if (!location) {
+          return Boom.notFound("No Location with this id");
+        }
+        return location;
+      } catch (err) {
+        return Boom.serverUnavailable("No Location with this id");
+      }
+    },
+    tags: ["api"],
+    description: "Find a Location",
+    notes: "Returns a location",
+    validate: { params: { id: IdSpec }, failAction: validationError },
+    response: { schema: LocationSpecPlus, failAction: validationError },
+  },
+
+  create: {
+    auth: {
+      strategy: "jwt",
+    },
+    handler: async function (request, h) {
+      try {
+        const location = request.payload;
+        const newLocation = await db.locationStore.addLocation(location);
+        if (newLocation) {
+          return h.response(newLocation).code(201);
+        }
+        return Boom.badImplementation("error creating location");
+      } catch (err) {
+        return Boom.serverUnavailable("Database Error");
+      }
+    },
+    tags: ["api"],
+    description: "Create a Location",
+    notes: "Returns the newly created location",
+    validate: { payload: LocationSpec, failAction: validationError },
+    response: { schema: LocationSpecPlus, failAction: validationError },
+  },
+
+  deleteOne: {
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function (request, h) {
       try {
         const location = await db.locationStore.getLocationById(request.params.id);
         if (!location) {
-          return Boom.notFound("Location not found");
+          return Boom.notFound("No Location with this id");
         }
-        return h.response(location).code(200);
-      } catch (err) {
-        return Boom.serverUnavailable("Database Error");
-      }
-    },
-  },
-
-  update: {
-    auth: false,
-    handler: async function (request, h) {
-      try {
-        await db.locationStore.update({ _id: request.params.id }, request.payload);
+        await db.locationStore.deleteLocationById(location._id);
         return h.response().code(204);
       } catch (err) {
         return Boom.serverUnavailable("No Location with this id");
       }
     },
-  },
-
-  deleteOne: {
-    auth: false,
-    handler: async function (request, h) {
-      try {
-        await db.locationStore.deleteLocationById(request.params.id);
-        return h.response().code(204);
-      } catch (err) {
-        return Boom.serverUnavailable("Database Error");
-      }
-    },
+    tags: ["api"],
+    description: "Delete a location",
+    validate: { params: { id: IdSpec }, failAction: validationError },
   },
 
   deleteAll: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function (request, h) {
       try {
         await db.locationStore.deleteAllLocations();
@@ -75,65 +100,7 @@ export const locationApi = {
         return Boom.serverUnavailable("Database Error");
       }
     },
-  },
-
-  findCategories: {
-    auth: false,
-    handler: async function (request, h) {
-      try {
-        const categories = await db.locationStore.getLocationCategories();
-        return h.response(categories).code(200);
-      } catch (err) {
-        return Boom.serverUnavailable("Database Error");
-      }
-    },
-  },
-
-  findLocationsByCategory: {
-    auth: false,
-    handler: async function (request, h) {
-      try {
-        const locations = await db.locationStore.getLocationsByCategory(request.params.category);
-        return h.response(locations).code(200);
-      } catch (err) {
-        return Boom.serverUnavailable("Database Error");
-      }
-    },
-  },
-
-  addGameToLocation: {
-    auth: false,
-    handler: async function (request, h) {
-      try {
-        await db.locationStore.addGameToLocation(request.params.locationId, request.params.gameId);
-        return h.response().code(204);
-      } catch (err) {
-        return Boom.serverUnavailable("Database Error");
-      }
-    },
-  },
-
-  removeGameFromLocation: {
-    auth: false,
-    handler: async function (request, h) {
-      try {
-        await db.locationStore.removeGameFromLocation(request.params.locationId, request.params.gameId);
-        return h.response().code(204);
-      } catch (err) {
-        return Boom.serverUnavailable("Database Error");
-      }
-    },
-  },
-
-  findGamesByLocation: {
-    auth: false,
-    handler: async function (request, h) {
-      try {
-        const games = await db.locationStore.getGamesByLocationId(request.params.id);
-        return h.response(games).code(200);
-      } catch (err) {
-        return Boom.serverUnavailable("Database Error");
-      }
-    },
+    tags: ["api"],
+    description: "Delete all LocationApi",
   },
 };
