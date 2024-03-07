@@ -7,6 +7,11 @@ export const maggie = {
   password: "secret",
 };
 
+export const maggieCredentials = {
+  email: "maggie@simpson.com",
+  password: "secret",
+};
+
 export const testUsers = [
   {
     firstName: "Homer",
@@ -48,6 +53,21 @@ export const dooleys = {
   category: "Cafe",
 };
 
+export const testLocations = [
+  {
+    title: "Revolutions",
+    category: "Bar",
+  },
+  {
+    title: "The Alamo",
+    category: "Restaurant",
+  },
+  {
+    title: "The White Rabbit",
+    category: "Cafe",
+  },
+];
+
 export const testGames = [
   {
     title: "Chess",
@@ -75,20 +95,5 @@ export const testGames = [
     duration: 30,
     description: "A board game for young children",
     category: "Children",
-  },
-];
-
-export const testLocations = [
-  {
-    title: "Revolutions",
-    category: "Bar",
-  },
-  {
-    title: "The Alamo",
-    category: "Restaurant",
-  },
-  {
-    title: "The White Rabbit",
-    category: "Cafe",
   },
 ];

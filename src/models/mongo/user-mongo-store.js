@@ -1,3 +1,13 @@
+/**
+ * Interface for CRUD operations on User data in MongoDB.
+ * Supports retrieving all users, finding by ID or email, adding, and deleting users.
+ *
+ * @module userMongoStore
+ * @author Peter Fortune
+ * @date 04/03/2024
+ * @see User Model for user data structure.
+ */
+
 import { User } from "./user.js";
 
 export const userMongoStore = {
@@ -36,5 +46,5 @@ export const userMongoStore = {
 
   async deleteAll() {
     await User.deleteMany({});
-  },
+  }
 };

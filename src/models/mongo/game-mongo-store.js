@@ -1,3 +1,14 @@
+/**
+ * Handles CRUD operations for Game data in MongoDB.
+ * Includes functionality for adding, retrieving, updating, and deleting games,
+ * with special handling for association to locations.
+ *
+ * @module gameMongoStore
+ * @author Peter Fortune
+ * @date 04/03/2024
+ * @see Game Model for game data structure and associations.
+ */
+
 import { Game } from "./game.js";
 
 export const gameMongoStore = {

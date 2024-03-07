@@ -1,33 +1,30 @@
-import { db } from "../models/db.js";
 import { GameSpec } from "../models/joi-schemas.js";
+import { db } from "../models/db.js";
 
-export const locationController = {
+export const gameController = {
   index: {
     handler: async function (request, h) {
       const location = await db.locationStore.getLocationById(request.params.id);
+      const game = await db.gameStore.getGameById(request.params.gameid);
       const viewData = {
-        title: "Location",
+        title: "Edit Song",
         location: location,
+        game: game,
       };
-      return h.view("location-view", viewData);
+      return h.view("game-view", viewData);
     },
   },
 
-  addGame: {
+  update: {
     validate: {
       payload: GameSpec,
       options: { abortEarly: false },
       failAction: function (request, h, error) {
-        return h
-        .view("location-view", { 
-          title: "Add game error", 
-          errors: error.details 
-        }).takeover()
-        .code(400);
+        return h.view("game-view", { title: "Edit game error", errors: error.details }).takeover().code(400);
       },
     },
     handler: async function (request, h) {
-      const location = await db.locationStore.getLocationById(request.params.id);
+      const game = await db.gameStore.getGameById(request.params.gameid);
       const newGame = {
         title: request.payload.title,
         age: Number(request.payload.age),
@@ -36,16 +33,8 @@ export const locationController = {
         duration: Number(request.payload.duration),
         description: request.payload.description,
       };
-      await db.gameStore.addGame(location._id, newGame);
-      return h.redirect(`/location/${location._id}`);
-    },
-  },
-
-  deleteGame: {
-    handler: async function (request, h) {
-      const location = await db.locationStore.getLocationById(request.params.id);
-      await db.gameStore.deleteGame(request.params.gameid);
-      return h.redirect(`/location/${location._id}`);
+      await db.gameStore.updateGame(game, newGame);
+      return h.redirect(`/location/${request.params.id}`);
     },
   },
 };

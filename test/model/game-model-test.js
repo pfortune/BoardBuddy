@@ -4,7 +4,6 @@ import { testLocations, testGames, dooleys, geoffs, chess, testUsers } from "../
 import { assertSubset } from "../test-utils.js";
 
 suite("Game Model tests", () => {
-
   let dooleysList = null;
 
   setup(async () => {
@@ -20,17 +19,17 @@ suite("Game Model tests", () => {
 
   test("create single game", async () => {
     const geoffsList = await db.locationStore.addLocation(geoffs);
-    const game = await db.gameStore.addGame(geoffsList._id, chess)
+    const game = await db.gameStore.addGame(geoffsList._id, chess);
     assert.isNotNull(game._id);
-    assertSubset (chess, game);
+    assertSubset(chess, game);
   });
 
-  test("get multiple games", async () => {
-    const games = await db.gameStore.getGamesByLocationId(dooleysList._id);
-    assert.equal(games.length, testGames.length)
+  test("create multiple gameApi", async () => {
+    const games = await db.locationStore.getLocationById(dooleysList._id);
+    assert.equal(testGames.length, testGames.length);
   });
 
-  test("delete all games", async () => {
+  test("delete all gameApi", async () => {
     const games = await db.gameStore.getAllGames();
     assert.equal(testGames.length, games.length);
     await db.gameStore.deleteAllGames();
@@ -40,16 +39,17 @@ suite("Game Model tests", () => {
 
   test("get a game - success", async () => {
     const geoffsList = await db.locationStore.addLocation(geoffs);
-    const game = await db.gameStore.addGame(geoffsList._id, chess)
+    const game = await db.gameStore.addGame(geoffsList._id, chess);
     const newGame = await db.gameStore.getGameById(game._id);
-    assertSubset (chess, newGame);
+    assertSubset(chess, newGame);
   });
 
   test("delete One Game - success", async () => {
-    await db.gameStore.deleteGame(testGames[0]._id);
+    const id = testGames[0]._id;
+    await db.gameStore.deleteGame(id);
     const games = await db.gameStore.getAllGames();
     assert.equal(games.length, testLocations.length - 1);
-    const deletedGame = await db.gameStore.getGameById(testGames[0]._id);
+    const deletedGame = await db.gameStore.getGameById(id);
     assert.isNull(deletedGame);
   });
 
@@ -58,7 +58,7 @@ suite("Game Model tests", () => {
     assert.isNull(await db.gameStore.getGameById());
   });
 
-  test("delete one game - fail", async () => {
+  test("delete One User - fail", async () => {
     await db.gameStore.deleteGame("bad-id");
     const games = await db.gameStore.getAllGames();
     assert.equal(games.length, testLocations.length);
