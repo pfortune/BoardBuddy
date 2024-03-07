@@ -7,7 +7,7 @@ export const gameController = {
       const location = await db.locationStore.getLocationById(request.params.id);
       const game = await db.gameStore.getGameById(request.params.gameid);
       const viewData = {
-        title: "Edit Song",
+        title: "Edit Game",
         location: location,
         game: game,
       };

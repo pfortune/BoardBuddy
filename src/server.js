@@ -19,6 +19,7 @@ import jwt from "hapi-auth-jwt2";
 import HapiSwagger from "hapi-swagger";
 import { fileURLToPath } from "url";
 import Handlebars from "handlebars";
+import * as hacli from "@antoniogiordano/hacli";
 import { webRoutes } from "./web-routes.js";
 import { db } from "./models/db.js";
 import { accountsController } from "./controllers/accounts-controller.js";
@@ -54,15 +55,20 @@ async function init() {
     port: process.env.PORT || 3000,
   });
 
-  await server.register(Cookie);
-  await server.register(jwt);
-
   await server.register([
+    Cookie,
+    jwt,
     Inert,
     Vision,
     {
       plugin: HapiSwagger,
       options: swaggerOptions,
+    },
+    {
+      plugin: hacli,
+      options: {
+        permissions: ["ADMIN", "USER"],
+      },
     },
   ]);
 
