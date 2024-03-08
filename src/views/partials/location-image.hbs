@@ -3,7 +3,6 @@
     <figure class="image is-256x256">
       {{#if location.img}}
         <img src="{{location.img}}" alt="Location Image" />
-        <!-- Optionally, place the Delete button directly under the image for better context -->
         <form action="/location/{{location._id}}/deleteimage" method="POST" style="margin-top: 10px;">
           <button type="submit" class="button is-small is-danger">Delete Image</button>
         </form>
