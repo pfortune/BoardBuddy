@@ -18,8 +18,8 @@ export const gameApi = {
     },
     tags: ["api"],
     response: { schema: GameArraySpec, failAction: validationError },
-    description: "Get all gameApi",
-    notes: "Returns all gameApi",
+    description: "Get all games",
+    notes: "Returns all games",
   },
 
   findOne: {
@@ -38,7 +38,7 @@ export const gameApi = {
       }
     },
     tags: ["api"],
-    description: "Find a Game",
+    description: "Find a game",
     notes: "Returns a game",
     validate: { params: { id: IdSpec }, failAction: validationError },
     response: { schema: GameSpecPlus, failAction: validationError },
@@ -79,7 +79,7 @@ export const gameApi = {
       }
     },
     tags: ["api"],
-    description: "Delete all gameApi",
+    description: "Delete all games",
   },
 
   deleteOne: {
