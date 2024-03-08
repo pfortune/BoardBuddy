@@ -63,10 +63,13 @@ export const locationController = {
     validate: {
       payload: GameSpec,
       options: { abortEarly: false },
-      failAction: function (request, h, error) {
+      failAction: async function (request, h, error) {
+        const locationId = request.params.id; 
+        const location = await db.locationStore.getLocationById(locationId);  
         return h
           .view("location-view", {
             title: "Add game error",
+            location: location,
             errors: error.details,
           })
           .takeover()
