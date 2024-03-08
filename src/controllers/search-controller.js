@@ -1,5 +1,4 @@
 import { db } from "../models/db.js";
-import { toTitleCase } from "../utils/helper.js";
 
 export const searchController = {
 index: {
