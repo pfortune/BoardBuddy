@@ -4,10 +4,12 @@
   <h1 class="title is-3">Search</h1>
   <p class="subtitle is-4">Filter by category:</p>
   <div class="buttons">
+    <!-- iterate over categories -->
     <a class="button" href="/search">All</a>
-    <a class="button" href="/search/restaurant">Restaurants</a>
-    <a class="button" href="/search/bar">Bars</a>
-    <a class="button" href="/search/store">Stores</a>
+
+    {{#each categories}}
+    <a class="button" href="/search/{{this}}">{{toTitleCase this}}</a>
+    {{/each}}
   </div>
 
   {{> results }}
