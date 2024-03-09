@@ -1,0 +1,28 @@
+{{> menu active="admin"}}
+
+<section class="section">
+  <h1 class="title is-4">Statistics</h1>
+  
+  <div class="container">
+    <h2 class="title is-5">User Statistics</h2>
+    <ul>
+      {{#each stats.userStats}}
+        <li>{{_id}}: {{count}}</li>
+      {{/each}}
+    </ul>
+
+    <h2 class="title is-5">Location Statistics</h2>
+    <ul>
+      {{#each stats.locationStats}}
+        <li>{{_id}}: {{count}}</li>
+      {{/each}}
+    </ul>
+
+    <h2 class="title is-5">Game Statistics</h2>
+    <ul>
+      {{#each stats.gameStats}}
+        <li>{{_id}}: {{count}}</li>
+      {{/each}}
+    </ul>
+  </div>
+</section>

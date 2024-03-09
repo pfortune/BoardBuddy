@@ -1,4 +1,5 @@
 import { db } from "../models/db.js";
+import { Analytics } from "../utils/analytics.js";
 
 export const adminController = {
   index: {
@@ -10,7 +11,7 @@ export const adminController = {
     handler: async function (request, h) {
       const loggedInUser = request.auth.credentials;
       const users = await db.userStore.getAllUsers();
-      const filteredUsers = users.filter(user => user.permission !== "ADMIN");
+      const filteredUsers = users.filter((user) => user.permission !== "ADMIN");
 
       const viewData = {
         title: "Admin Dashboard",
@@ -18,6 +19,22 @@ export const adminController = {
         users: filteredUsers,
       };
       return h.view("admin-view", viewData);
+    },
+  },
+
+  stats: {
+    plugins: {
+      hacli: {
+        permissions: ["ADMIN"],
+      },
+    },
+    handler: async function (request, h) {
+      const stats = await Analytics.compileStats();
+      const viewData = {
+        title: "Admin Stats",
+        stats,
+      };
+      return h.view("admin-stats", viewData);
     },
   },
 

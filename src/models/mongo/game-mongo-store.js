@@ -59,4 +59,11 @@ export const gameMongoStore = {
     gameDoc.description = updatedGame.description;
     await gameDoc.save();
   },
+
+  async gameStats() {
+    return Game.aggregate([
+      { $group: { _id: "$category", count: { $sum: 1 } } }
+    ]);
+  },
+  
 };

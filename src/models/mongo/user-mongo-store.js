@@ -46,5 +46,12 @@ export const userMongoStore = {
 
   async deleteAll() {
     await User.deleteMany({});
-  }
+  },
+  
+  async countUsers() {
+    return User.aggregate([
+      { $group: { _id: "$permission", count: { $sum: 1 } } }
+    ]);
+  },
+  
 };

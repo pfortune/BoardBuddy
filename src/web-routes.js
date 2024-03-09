@@ -31,6 +31,7 @@ export const webRoutes = [
   // Admin routes
   { method: "GET", path: "/admin", config: adminController.index },
   { method: "GET", path: "/admin/users/{id}/delete", config: adminController.deleteUser },
+  { method: "GET", path: "/admin/stats", config: adminController.stats },
 
   // Dashboard routes
   { method: "GET", path: "/dashboard", config: dashboardController.index },
