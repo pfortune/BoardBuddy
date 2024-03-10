@@ -26,14 +26,26 @@ export const dashboardController = {
     validate: {
       payload: LocationSpec,
       options: { abortEarly: false },
-      failAction: function (request, h, error) {
-        return h.view("dashboard-view", { title: "Add Location error", errors: error.details }).takeover().code(400);
+      failAction: async function (request, h, error) {
+        let locations;
+      const loggedInUser = request.auth.credentials;
+
+      if (loggedInUser.permission === "ADMIN") {
+        locations = await db.locationStore.getAllLocations();
+      } else {
+        locations = await db.locationStore.getLocations(loggedInUser._id);
+      }
+
+        return h.view("dashboard-view", { title: "Add Location error", locations, errors: error.details }).takeover().code(400);
       },
     },
     handler: async function (request, h) {
       const loggedInUser = request.auth.credentials;
+
+
       const newLocation = {
         userid: loggedInUser._id,
+        locations,
         title: request.payload.title,
         category: request.payload.category,
       };
