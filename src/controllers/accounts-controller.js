@@ -62,6 +62,37 @@ export const accountsController = {
       return h.redirect("/");
     },
   },
+  profile: {
+    handler: async function (request, h) {
+      const userId = request.auth.credentials._id; 
+      const user = await db.userStore.getUserById(userId); 
+
+      if (!user) {
+        return h.redirect("/");
+      }
+
+      return h.view("profile-view", {
+        title: "Your Profile",
+        user: user
+      });
+    },
+  },
+
+  updateUser: {
+    validate: {
+      payload: UserSpec,
+      options: { abortEarly: false },
+      failAction: function (request, h, error) {
+        return h.view("profile-view", { title: "Update error", errors: error.details }).takeover().code(400);
+      },
+    },
+    handler: async function (request, h) {
+      const updatedUser = request.payload;
+      const userId = request.auth.credentials._id; 
+      await db.userStore.updateUser(userId, updatedUser); 
+      return h.redirect("/profile");
+    },
+  },
 
   async validate(request, session) {
     const user = await db.userStore.getUserById(session.id);
