@@ -29,11 +29,13 @@ export const gameMongoStore = {
     return games;
   },
 
-  async gameStats() {
-    return Game.aggregate([
-      { $group: { _id: "$category", count: { $sum: 1 } } }
+  async gameCount() {
+    const result = await Game.aggregate([
+      { $count: "totalGames" }
     ]);
-  },
+    
+    return result.length > 0 ? result[0].totalGames : 0;
+  },  
 
   async getGameById(id) {
     if (id) {
