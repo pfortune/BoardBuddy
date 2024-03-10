@@ -6,6 +6,7 @@
           <!-- if user.permission is set to admin show admin links -->
           {{#isEqual user.permission "ADMIN"}}
             <a id="admin" class="button" href="/admin"> Admin </a>
+            <a id="admin-stats" class="button" href="/admin/stats"> Stats </a>
           {{/isEqual}}
           
           <a id="dashboard" class="button" href="/dashboard"> Dashboard </a>

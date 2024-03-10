@@ -41,7 +41,7 @@ suite("Game API tests", () => {
     }
   });
 
-  test("Delete GameApi", async () => {
+  test("Delete Game", async () => {
     for (let i = 0; i < testGames.length; i += 1) {
       // eslint-disable-next-line no-await-in-loop
       await buddyService.createGame(geoffsBar._id, testGames[i]);

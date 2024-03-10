@@ -29,6 +29,12 @@ export const gameMongoStore = {
     return games;
   },
 
+  async gameStats() {
+    return Game.aggregate([
+      { $group: { _id: "$category", count: { $sum: 1 } } }
+    ]);
+  },
+
   async getGameById(id) {
     if (id) {
       const game = await Game.findOne({ _id: id }).lean();

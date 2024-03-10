@@ -31,6 +31,12 @@ export const locationMongoStore = {
     return null;
   },
 
+  async locationStats() {
+    return Location.aggregate([
+      { $group: { _id: "$category", count: { $sum: 1 } } }
+    ]);
+  },
+
   async getLocationCategories() {
     try{
       const categories = await Location.find().distinct("category");
