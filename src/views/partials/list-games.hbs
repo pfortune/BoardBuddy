@@ -1,10 +1,13 @@
+{{#if location.games.length}}
+
+
 <table class="table is-fullwidth">
   <thead>
     <tr>
-      <th>Game</th>
-      <th>Players</th>
-      <th>Playing Time</th>
-      <th>Age</th>
+      <th><i class="fas fa-dice"></i> Game</th>
+      <th><i class="fas fa-users"></i> Players</th>
+      <th><i class="fas fa-clock"></i> Playing Time</th>
+      <th><i class="fas fa-child"></i> Age</th>
       <th></th>
     </tr>
   </thead>
@@ -19,11 +22,12 @@
         </td>
         <td>
           {{duration}} minutes
-        <td>
-          {{age}}
         </td>
         <td>
-          <a href="/location/{{../location._id}}/delete/game/{{_id}}" class="button">
+          {{age}}+
+        </td>
+        <td>
+          <a href="/location/{{../location._id}}/delete/game/{{_id}}" class="button is-danger is-outlined">
             <span class="icon is-small">
               <i class="fas fa-trash-alt"></i>
             </span>
@@ -33,3 +37,9 @@
     {{/each}}
   </tbody>
 </table>
+
+{{else}}
+<tr>
+  <td colspan="5" class="has-text-centered">No games added yet. Be the first to add one!</td>
+</tr>
+{{/if}}
