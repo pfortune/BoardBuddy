@@ -11,6 +11,9 @@
           
           <a id="dashboard" class="button" href="/dashboard"> Dashboard </a>
           <a id="search" class="button" href="/search"> Search </a>
+          {{#isEqual user.permission "USER"}}
+            {{!-- <a id="profile" class="button" href="/profile"> Profile </a> --}}
+          {{/isEqual}}
           <a id="about" class="button" href="/about"> About </a>
           <a id="logout" class="button" href="/logout"> Logout </a>
         </div>
@@ -18,3 +21,7 @@
     </div>
   </div>
 </nav>
+
+<script>
+  document.getElementById("{{active}}").classList.add("is-primary");
+</script>

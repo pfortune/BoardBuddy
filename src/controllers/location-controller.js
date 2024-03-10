@@ -54,6 +54,7 @@ export const locationController = {
         return h.redirect(`/location/${location._id}`);
       } catch (err) {
         console.error("Error deleting image:", err);
+        // eslint-disable-next-line no-restricted-globals
         return h.redirect(`/location/${location._id}`);
       }
     },

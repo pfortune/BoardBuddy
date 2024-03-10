@@ -16,8 +16,18 @@ import { gameMongoStore } from "./game-mongo-store.js";
 
 export const locationMongoStore = {
   async getAllLocations() {
-    const locations = await Location.find().lean();
-    return locations;
+    try {
+      const locations = await Location.find().lean();
+      // eslint-disable-next-line no-restricted-syntax
+      for (const location of locations) {
+        // eslint-disable-next-line no-await-in-loop
+        location.games = await gameMongoStore.getGamesByLocationId(location._id);
+      }
+      return locations;
+    } catch (error) {
+      console.error("Error fetching all locations:", error);
+      return [];
+    }
   },
 
   async getLocationById(id) {
@@ -49,11 +59,17 @@ export const locationMongoStore = {
   async getLocationsByCategory(category) {
     try {
       const locations = await Location.find({ category: category }).lean();
+      // eslint-disable-next-line no-restricted-syntax
+      for (const location of locations) {
+        // eslint-disable-next-line no-await-in-loop
+        location.games = await gameMongoStore.getGamesByLocationId(location._id);
+      }
       return locations;
     } catch (error) {
+      console.error("Error fetching locations by category:", error);
       return [];
     }
-  },
+  },  
 
   async addLocation(location) {
     const newLocation = new Location(location);

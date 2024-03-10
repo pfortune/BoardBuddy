@@ -60,14 +60,20 @@ export const testLocations = [
   {
     title: "Revolutions",
     category: "Bar",
+    x: 50,
+    y: 60
   },
   {
     title: "The Alamo",
     category: "Restaurant",
+    x: 30,
+    y: 40
   },
   {
     title: "The White Rabbit",
     category: "Cafe",
+    x: 20,
+    y: 30
   },
 ];
 

@@ -27,7 +27,7 @@ export const dashboardController = {
       payload: LocationSpec,
       options: { abortEarly: false },
       failAction: async function (request, h, error) {
-        let locations;
+      let locations;
       const loggedInUser = request.auth.credentials;
 
       if (loggedInUser.permission === "ADMIN") {
@@ -42,12 +42,21 @@ export const dashboardController = {
     handler: async function (request, h) {
       const loggedInUser = request.auth.credentials;
 
+      let locations;
+
+      if (loggedInUser.permission === "ADMIN") {
+        locations = await db.locationStore.getAllLocations();
+      } else {
+        locations = await db.locationStore.getLocations(loggedInUser._id);
+      }
 
       const newLocation = {
         userid: loggedInUser._id,
         locations,
         title: request.payload.title,
         category: request.payload.category,
+        x: request.payload.x,
+        y: request.payload.y,
       };
       await db.locationStore.addLocation(newLocation);
       return h.redirect("/dashboard");
