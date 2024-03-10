@@ -1,35 +1,33 @@
-
 <html>
-  <head>
-    <title>{{title}}</title>
-    <link rel="icon" type="image/png" href="../images/favicon.ico" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
-    <link rel="stylesheet" href="/css/main.css" />
-    <script
-      type="application/javascript"
-      src="https://kit.fontawesome.com/dd084b05a9.js"
-      crossorigin="anonymous"
-    ></script>
-    <script type="application/javascript" src="/js/custom.js"></script>
-  </head>
-  <body class="container">
-    <div class="hero is-info is-small">
-      <div class="hero-body">
+<head>
+  <title>{{title}}</title>
+  <link rel="icon" type="image/png" href="../images/favicon.ico" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+  <link rel="stylesheet" href="/css/main.css" />
+  <script type="application/javascript" src="https://kit.fontawesome.com/dd084b05a9.js" crossorigin="anonymous"></script>
+  <script type="application/javascript" src="/js/custom.js"></script>
+</head>
+<body class="container">
+  <div class="hero is-info is-small">
+    <div class="hero-body">
+      <a href="/" class="is-flex is-align-items-center" style="color: white;">
+        <i class="fas fa-dice fa-2x" style="margin-right: 10px;"></i>
         <p class="title">
           Board Buddy
         </p>
-      </div>
+      </a>
     </div>
-    <section class="box">
-      {{{content}}}
-      {{> error }}
-    </section>
-    <footer class="footer box">
-      <div class="content has-text-centered">
-        <p>
-          Copyright Board Buddy 2024
-        </p>
-      </div>
-    </footer>
-  </body>
+  </div>
+  <section class="box">
+    {{{content}}}
+    {{> error }}
+  </section>
+  <footer class="footer box">
+    <div class="content has-text-centered">
+      <p>
+        Copyright Board Buddy 2024
+      </p>
+    </div>
+  </footer>
+</body>
 </html>
