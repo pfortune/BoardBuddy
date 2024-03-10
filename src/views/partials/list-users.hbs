@@ -1,9 +1,14 @@
 {{#each users}}
   <div class="box">
-    <article class="media">
+    <article class="media" style="align-items: center;">
+      <div class="media-left">
+        <span class="icon">
+          <i class="fas fa-user-circle fa-2x"></i>
+        </span>
+      </div>
       <div class="media-content">
         <div class="content">
-          <p class="is-size-4 has-text-weight-semibold">
+          <p class="is-size-4 has-text-weight-semibold" style="margin-bottom: 0;">
             {{firstName}} {{lastName}}
           </p>
         </div>
