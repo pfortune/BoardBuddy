@@ -79,7 +79,7 @@ export const userApi = {
     },
     tags: ["api"],
     description: "Delete all userApi",
-    notes: "All userApi removed from Board Buddy",
+    notes: "All  removed from Board Buddy",
   },
 
   deleteOne: {

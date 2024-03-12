@@ -8,9 +8,9 @@
  * @date 04/03/2024
  */
 
-import { userApi } from "./api/user-api.js";
-import { gameApi } from "./api/game-api.js";
-import { locationApi } from "./api/location-api.js";
+import { userApi } from "./controllers/user-api.js";
+import { gameApi } from "./controllers/game-api.js";
+import { locationApi } from "./controllers/location-api.js";
 
 export const apiRoutes = [
   // User Routes
