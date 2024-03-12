@@ -1,6 +1,6 @@
 {
   "name": "boardbuddy",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "A web app connecting board game enthusiasts with local gaming venues.",
   "main": "src/server.js",
   "type": "module",
@@ -14,7 +14,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@antoniogiordano/hacli": "^1.0.2",
     "@hapi/boom": "^10.0.1",
     "@hapi/cookie": "^12.0.1",
     "@hapi/hapi": "^21.3.3",
@@ -22,12 +21,10 @@
     "@hapi/vision": "^7.0.3",
     "cloudinary": "^2.0.3",
     "dotenv": "^16.4.5",
-    "handlebars": "^4.7.8",
     "hapi-auth-jwt2": "^10.5.1",
     "hapi-swagger": "^17.2.1",
     "joi": "^17.12.2",
     "jsonwebtoken": "^9.0.2",
-    "lowdb": "^7.0.1",
     "mais-mongoose-seeder": "^1.0.7",
     "mongoose": "^8.2.0",
     "uuid": "^9.0.1"

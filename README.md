@@ -6,16 +6,6 @@ Board Buddy is a web application designed to simplify the discovery and manageme
 
 <http://www.boardbuddy.ie>
 
-## Users
-
-**Admin**
-Username: homer@simpson.com
-Password: secret
-
-**User**
-Username: marge@simpson.com
-Password: secret
-
 ### Key Features
 
 - **Discover Game-Friendly Locations:** Users can explore a selection of local cafes, pubs, and other venues with board games.
@@ -38,26 +28,9 @@ Get started with Board Buddy today and join a growing community of board game en
 * **Backend:** Node.js, Hapi.js
 * **Database:** Mongo Cloud Atlas 
 * **Storage:** Cloudinary
-* **Templating:** Handlebars
+* **Frontend:** Svelte
 * **API Validation:** Joi
 * **API Documentation:** OpenAI / Swagger 
 * **Authentication:** JSON Web Tokens (JWT)
-* **Styling:** Bulma CSS
+* **Styling:** Tailwind CSS
 * **Testing:** Mocha, Chai
-
-## Getting Started
-
-**Prerequisites:**
-
-* Node.js and npm installed
-
-**Installation:**
-
-1. Clone the repository: `git clone https://github.com/pfortune/BoardBuddy.git`
-2. Navigate to the project directory: `cd BoardBuddy`
-3. Install dependencies: `npm install`
-
-**Development:**
-
-1. Start the development server: `npm run dev` (or adjust the command according to your setup)
-
