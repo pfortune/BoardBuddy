@@ -30,7 +30,6 @@ export const seedData = {
         category: "Library",
         x: 53.274,
         y: -9.0494,
-        img: "library.jpg",
         userid: "->users.margeSimpson"
       },
       dublinCafe: {
@@ -38,7 +37,6 @@ export const seedData = {
         category: "Cafe",
         x: 53.3498,
         y: -6.2603,
-        img: "cafe.jpg",
         userid: "->users.lisaSimpson"
       },
       corkBookstore: {
@@ -46,7 +44,6 @@ export const seedData = {
         category: "Bookstore",
         x: 51.8985,
         y: -8.4756,
-        img: "bookstore.jpg",
         userid: "->users.margeSimpson"
       },
        limerickRestaurant: {
@@ -54,7 +51,6 @@ export const seedData = {
         category: "Restaurant",
         x: 52.6638,
         y: -8.6267,
-        img: "restaurant.jpg",
         userid: "->users.lisaSimpson"
       },
     },

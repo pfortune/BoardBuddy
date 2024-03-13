@@ -35,8 +35,15 @@ export function connectMongo() {
     console.log("database disconnected");
   });
 
-  db.once("open", function () {
-    console.log(`database connected to ${this.name} on ${this.host}`);
-    seed();
+  db.once("open", async function () {
+    console.log(`Database connected to ${this.name} on ${this.host}`);
+    const userCount = await Mongoose.model("User").countDocuments();
+
+    if (userCount === 0) {
+      console.log("No users found, seeding database...");
+      await seed();
+    } else {
+      console.log("Existing data found, skipping seeding.");
+    }
   });
 }

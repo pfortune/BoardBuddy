@@ -8,23 +8,18 @@
  * @date 04/03/2024
  */
 
+import Hapi from "@hapi/hapi";
 import Inert from "@hapi/inert";
 import Vision from "@hapi/vision";
-import Hapi from "@hapi/hapi";
-import Cookie from "@hapi/cookie";
 import dotenv from "dotenv";
 import path from "path";
 import Joi from "joi";
 import jwt from "hapi-auth-jwt2";
 import HapiSwagger from "hapi-swagger";
+
 import { fileURLToPath } from "url";
-import Handlebars from "handlebars";
-import "./utils/handlebar-helper.js";
-import * as hacli from "@antoniogiordano/hacli";
-import { webRoutes } from "./web-routes.js";
 import { db } from "./models/db.js";
-import { accountsController } from "./controllers/accounts-controller.js";
-import { validate } from "./api/jwt-utils.js";
+import { validate } from "./controllers/jwt-utils.js";
 import { apiRoutes } from "./api-routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -51,6 +46,7 @@ const swaggerOptions = {
     },
   },
   security: [{ jwt: [] }],
+  documentationPath: "/",
 };
 
 async function init() {
@@ -59,7 +55,6 @@ async function init() {
   });
 
   await server.register([
-    Cookie,
     jwt,
     Inert,
     Vision,
@@ -67,62 +62,18 @@ async function init() {
       plugin: HapiSwagger,
       options: swaggerOptions,
     },
-    {
-      plugin: hacli,
-      options: {
-        permissions: ["ADMIN", "USER"],
-      },
-    },
   ]);
 
   server.validator(Joi);
 
-  server.views({
-    engines: {
-      hbs: Handlebars,
-    },
-    relativeTo: __dirname,
-    path: "./views",
-    layoutPath: "./views/layouts",
-    partialsPath: "./views/partials",
-    layout: true,
-    isCached: false,
-  });
-
-  server.auth.strategy("session", "cookie", {
-    cookie: {
-      name: process.env.COOKIE_NAME,
-      password: process.env.COOKIE_PASSWORD,
-      isSecure: false,
-    },
-    redirectTo: "/",
-    validate: accountsController.validate,
-  });
   server.auth.strategy("jwt", "jwt", {
     key: process.env.COOKIE_PASSWORD,
     validate: validate,
     verifyOptions: { algorithms: ["HS256"] },
   });
-  server.auth.default("session");
+  server.auth.default("jwt");
 
-  server.ext("onPreResponse", (request, h) => {
-    const { response } = request;
-  
-    if (response.isBoom && response.output.statusCode === 403) {
-      return h.redirect("/dashboard").takeover();
-    }
-  
-    if (response.variety === "view") {
-      if (request.auth.isAuthenticated) {
-        response.source.context.user = request.auth.credentials;
-      }
-    }
-  
-    return h.continue;
-  });
-   
-  db.init("mongo");
-  server.route(webRoutes);
+  db.init();
   server.route(apiRoutes);
   await server.start();
   console.log("Server running on %s", server.info.uri);
