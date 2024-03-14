@@ -11,6 +11,7 @@
 
 import { userApi } from "./controllers/user-api.js";
 import { gameApi } from "./controllers/game-api.js";
+import { adminApi } from "./controllers/admin-api.js";
 import { locationApi } from "./controllers/location-api.js";
 
 export const apiRoutes = [
